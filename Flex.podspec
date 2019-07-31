@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "Flex"
-  spec.version      = "2.2.1"
+  spec.version      = "2.2.0"
   spec.summary      = "Take care for managing the localization in realtime."
 
   spec.description  = <<-DESC
