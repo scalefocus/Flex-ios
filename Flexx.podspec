@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = 'Flexx'
-  spec.version      = '2.3.0'
+  spec.version      = '2.3.1'
   spec.summary      = 'Take care for managing the localization in realtime.'
 
   spec.description  = <<-DESC
@@ -18,7 +18,9 @@ Pod::Spec.new do |spec|
 
   spec.source       = {:http => 'https://github.com/upnetix/Flex-ios/raw/master/Flex.zip'}
 
-  spec.preserve_paths = 'localizer_download', 'localizer_download.sh', 'Flex.framework/*', 'Flex.framework'
+  spec.source_files = "Flex/**/*.{h,m}", "localizer_download", "localizer_download.sh"
+
+  spec.preserve_paths = 'localizer_download.sh', 'Flex.framework/*', 'Flex.framework'
 
   spec.ios.vendored_frameworks = 'Flex.framework', 'CryptoSwift.framework'
 

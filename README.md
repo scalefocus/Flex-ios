@@ -15,12 +15,16 @@ In order to integrate the pod, you'll have to add 'Flex' to your Podfle.
 
 You can add the Flex pod in a familiar way:
 ```
-pod 'Flex'
+pod 'Flexx'
 ```
 
 Now run this from the directory where your project is.
 ```
 pod install
+```
+
+```
+import Flex
 ```
 ----------
 Library Integration
@@ -43,8 +47,8 @@ You will need to add a run script to your project. For your convenience, the scr
 
 In your project - open Build Phases and add a new Run script with the following:
 ```
-chmod +x ./Pods/Flex/localizer_download.sh
-././Pods/Flex/localizer_download.sh APP_ID="APP_ID" SALT="SALT" DOMAINS="DOMAIN1,DOMAIN2,DOMAIN3" BASE_URL="BASE_URL"
+chmod +x ./Pods/Flexx/localizer_download.sh
+././Pods/Flexx/localizer_download.sh APP_ID="APP_ID" SALT="SALT" DOMAINS="DOMAIN1,DOMAIN2,DOMAIN3" BASE_URL="BASE_URL"
 ```
 
 > **Note:** Base Url for development env.->
