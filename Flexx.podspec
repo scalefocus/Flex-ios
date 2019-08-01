@@ -16,8 +16,7 @@ Pod::Spec.new do |spec|
 
   spec.ios.deployment_target = '9.3'
 
-  spec.source       = {:git => 'https://github.com/upnetix/Flex-ios/raw/2.2.2/Flex.zip',
-		       :tag => '2.2.2'}
+  spec.source       = {:http => 'https://github.com/upnetix/Flex-ios/raw/master/Flexx.zip'}
 
   spec.preserve_paths = 'localizer_download', 'localizer_download.sh', 'Flex.framework/*', 'Flex.framework'
 
