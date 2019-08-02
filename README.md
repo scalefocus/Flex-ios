@@ -1,4 +1,4 @@
-Flex / Pod
+Flex
 ===================
 The library's goal is to facilitate the process of adding localization to iOS projects by providing an easy to use interface for getting and updating localization strings from an Upnetix internal or client hosted server.
 
@@ -27,20 +27,8 @@ pod install
 import Flex
 ```
 ----------
-Library Integration
--------------
-**IMPORTANT**:
 
->Currently the library is working with HTTP and not HTTPS. Which means that you should add App Transport Security in order for updates to work. The domain to add is:
-http://localizer.upnetix.cloud/. Just add this to Info.plist: 
-
-```
-<key>NSAppTransportSecurity</key>
-<dict>
-	<key>NSAllowsArbitraryLoads</key>
-	<true/>
-</dict>
-```
+**Library Integration:**
 
 **Run Script:**
 You will need to add a run script to your project. For your convenience, the script is included in the pod.
@@ -90,7 +78,7 @@ Flex contains several methods. Some of them are mandatory and others are optiona
 
 **THIS IS MANDATORY**
 ```
-initialize(locale: Locale, enableLogging: Bool? = false, defaultReturn: DefaultReturnBehavior = .empty, completed: (() -> Swift.Void)? = nil)
+Flex.shared.initialize(locale: Locale, enableLogging: Bool? = false, defaultReturn: DefaultReturnBehavior = .empty, completed: (() -> Swift.Void)? = nil)
 ```
 Initialization of Flex. This method should be called as early as possible like in AppDelegate's method **didFinishLaunchingWithOptions:**
 Parameters:
@@ -100,20 +88,19 @@ Parameters:
 - defaultReturn: desired behavior when no key found
 - completed: an optional callback when initialization process has finished.
 
-
-The Localizer instance **should be aware of the application's life cycle**.
-So in the corresponding AppDelegate methods, call these Localizer methods.
+The Flex instance **should be aware of the application's life cycle**.
+So in the corresponding AppDelegate methods, call these Flex methods.
 
 ```
-didEnterBackground()
-willEnterForeground()
-willTerminate()
+Flex.shared.didEnterBackground()
+Flex.shared.willEnterForeground()
+Flex.shared.willTerminate()
 ```
 
 Optional Methods:
 
 ```
-getString(key: String)
+Flex.shared.getString(key: String)
 ```
 Retreives value from a key-value collection
 
@@ -122,7 +109,7 @@ Retreives value from a key-value collection
 - example: getString(key: "domainName.stringKey")
 
 ```
-changeLocale(desiredLocale: Locale, changeCallback: Localizations.Localizer.ChangeLocaleCallback? = default)
+Flex.shared.changeLocale(desiredLocale: Locale, changeCallback: Localizations.Flex.ChangeLocaleCallback? = default)
 ```
 Function which change loaded translations with those for the passed as argument Locale. This is to force reading another locale file.
 Parameters
@@ -130,11 +117,11 @@ Parameters
 - changeCallback: callback when change of locale is completed no matter if it was successful
 
 ```
-getAvailableLocales(withCompletion completion: @escaping ([Language]) -> Void)
+Flex.shared.getAvailableLocales(withCompletion completion: @escaping ([Language]) -> Void)
 ```
 
 ```
-getCurrentLocale() -> Locale
+Flex.shared.getCurrentLocale() -> Locale
 ```
 
 -----------
@@ -148,7 +135,7 @@ Usage of
 ```
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 	// Override point for customization after application launch.
-	Localizer.shared.initialize(locale: Locale.current, enableLogging: true, defaultReturn: Localizer.DefaultReturnBehavior.empty, completed: {
+	Flex.shared.initialize(locale: Locale.current, enableLogging: true, defaultReturn: Flex.DefaultReturnBehavior.empty, completed: {
 		print("initialize callback")
 	})
 	// ... Other implementations
@@ -157,16 +144,28 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ```
 ```
-textView.text = Localizer.shared.getString(key: "Domain.test_one")
+let text = Flex.shared.getString(key: "Domain.test_one")
 
 ```
 
 ```
 let locale = someBoolean ? "en" : "bg"
-Localizer.shared.changeLocale(desiredLocale: Locale.init(identifier: locale), changeCallback: {[weak self] (success, locale) in
+Flex.shared.changeLocale(desiredLocale: Locale.init(identifier: locale), changeCallback: {[weak self] (success, locale) in
 	print("Changed Locale was successful \(success) and current locale is \(locale)")
-	self?.textView.text = Localizer.shared.getString(key: "Domain.test_one")
+	let text = Flex.shared.getString(key: "Domain.test_one")
 })
+
+```
+
+```
+Flex.shared.getAvailableLocales { locales, args  in
+    for language in locales {
+        print("LANGUAGE: \(language.code), \(language.name)")
+    }
+    if let args = args {
+        print("args: \(args)")
+    }
+}
 
 ```
 
