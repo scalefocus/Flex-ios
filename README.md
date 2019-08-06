@@ -1,6 +1,6 @@
 Flex
 ===================
-The library's goal is to facilitate the process of adding localization to iOS projects by providing an easy to use interface for getting and updating localization strings from an Upnetix internal or client hosted server.
+The library's goal is to store and facilitate the proccess of adding strings to iOS projects by providing an easy to use interface for getting and updating strings from an Upnetix internal or client hosted server.
 
 
 The library is divided into two modules. One module is open to the outside world and the other one is hidden. The modules are: **Main Service** and **Update Service**.
@@ -39,16 +39,10 @@ chmod +x ./Pods/Flexx/localizer_download.sh
 ././Pods/Flexx/localizer_download.sh APP_ID="APP_ID" SALT="SALT" DOMAINS="DOMAIN1,DOMAIN2,DOMAIN3" BASE_URL="BASE_URL"
 ```
 
-> **Note:** Base Url for development env.->
-- If using version 1.* -> http://localizer.upnetix.cloud/api/localizations/
-- if using version 2.* -> http://localizer.upnetix.cloud/api/localizations/v1.1
-
 The first command **chmod** is for changing the permissions of script file. +x means that the file can be executed. For more commands see chmod documentation
 The second line is the actual execution of the script. There the path to the script is specified as relative to the project root directory. If you want you can specity different path relative to the project root directory.
 
 **SCRIPT EXPLANATION**:
-
-***ZIP_FILE_NAME*** - name of the zip file, where at every build will be downloaded the latest version.
 
 ***APP_ID*** - This is the identifier of the application. You have passed it as an argument in the Run Script.
 
@@ -57,17 +51,6 @@ The second line is the actual execution of the script. There the path to the scr
 ***DOMAINS*** - These are all domain names. You have to passed them separated with comma(",") in the Run Script.
 
 ***BASE_URL*** - This is the strings provider service URL. You have to passed it as the <BASE_URL> parameter in the Run Script.
-
-FROM HERE ON THOSE SHOULD **NOT** BE CHAGED OR YOUR SCRIPT MIGHT MISBEHAVE.
-
-***AUTH_HEADER*** - this is hashed APP_ID + SALT String with SHA256 algorithm.
-curl command is used to make and http call.
-***-o*** is used to specify the destination of the of the file. Location where the file will be saved.
-***-H*** is used to specify a HEADER for the http call.
-Last is the http url where the resource is.
-Unzip command is used to unzip a file.
-First we specify the source location
-***-d*** is used to specify the destination where the zip contents will be unzipped.
 
 -------------
 
