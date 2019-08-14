@@ -1,11 +1,12 @@
 Flex
 ===================
-The library's goal is to store and facilitate the proccess of adding strings to iOS projects by providing an easy to use interface for getting and updating strings from an Upnetix internal or client hosted server.
+The library's goal is to store and facilitate the proccess of adding string assets to iOS projects by providing an easy to use interface for getting and updating strings from a hosted server. This allows you to manage the strings from the web admin panel and update them in the live product, without the need of recompiling and releasing a new version of the app.
+The library also makes it easy to add a new translation to the app. Just add the new language strings in the admin panel and voilà - the users can already see and use the new language option.
 
 
 The library is divided into two modules. One module is open to the outside world and the other one is hidden. The modules are: **Main Service** and **Update Service**.
 The Job of the Main Service module is to provide easy to use functionality to get Strings for supported language.
-The Job of the Update Service module is to update strings of current language on regular bases.
+The Job of the Update Service module is to update strings of current language on regular basis.
 
 ----------
 Pod Installation
@@ -39,8 +40,7 @@ chmod +x ./Pods/Flexx/localizer_download.sh
 ././Pods/Flexx/localizer_download.sh APP_ID="APP_ID" SALT="SALT" DOMAINS="DOMAIN1,DOMAIN2,DOMAIN3" BASE_URL="BASE_URL"
 ```
 
-The first command **chmod** is for changing the permissions of script file. +x means that the file can be executed. For more commands see chmod documentation
-The second line is the actual execution of the script. There the path to the script is specified as relative to the project root directory. If you want you can specity different path relative to the project root directory.
+The path to the script is specified as relative to the project root directory. If you want you can specity different path relative to the project root directory.
 
 **SCRIPT EXPLANATION**:
 
@@ -113,7 +113,6 @@ Usage
 -------------
 
 Here are some code snippets on how to use the library:
-Usage of
 
 ```
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
