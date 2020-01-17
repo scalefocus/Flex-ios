@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppId</key>
+	<string>TestFlex</string>
+	<key>BaseUrl</key>
+	<string>http://localizer.upnetix.cloud</string>
+	<key>Domains</key>
+	<array>
+		<string>Common</string>
+		<string>Domain</string>
+	</array>
+	<key>Secret</key>
+	<string>b5befb61-c192-41fe-9d67-d9992fb3043e</string>
+	<key>ShaValue</key>
+	<string>5b5eedf897659d62c3ef0896b1b38d2ee5cc450cce347a44b4460c61f0df7a1d</string>
+</dict>
+</plist>

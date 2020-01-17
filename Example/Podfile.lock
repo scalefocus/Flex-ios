@@ -1,0 +1,28 @@
+PODS:
+  - Crashlytics (3.12.0):
+    - Fabric (~> 1.9.0)
+  - Fabric (1.9.0)
+  - Flexx (3.0.0)
+
+DEPENDENCIES:
+  - Crashlytics (~> 3.12.0)
+  - Fabric (~> 1.9.0)
+  - Flexx (from `../`)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Crashlytics
+    - Fabric
+
+EXTERNAL SOURCES:
+  Flexx:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
+  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
+  Flexx: 8df2908ec41b028346c133d758a06b8e1e52cea6
+
+PODFILE CHECKSUM: 240277aa675a679974a7d0d427b40f83322d8f92
+
+COCOAPODS: 1.8.4
