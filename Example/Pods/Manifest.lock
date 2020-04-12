@@ -1,0 +1,16 @@
+PODS:
+  - Flexx (3.0.0)
+
+DEPENDENCIES:
+  - Flexx (from `../`)
+
+EXTERNAL SOURCES:
+  Flexx:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Flexx: f22775a6adfcdb4938261e78bee47d792a4fd679
+
+PODFILE CHECKSUM: e42a037543d3c2df3a0bbd24493f8c4da7f6dc52
+
+COCOAPODS: 1.9.1
