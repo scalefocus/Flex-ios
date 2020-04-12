@@ -1,6 +1,0 @@
-framework module Flexx {
-  umbrella header "Flexx-umbrella.h"
-
-  export *
-  module * { export * }
-}

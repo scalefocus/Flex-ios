@@ -1,133 +1,169 @@
-# Flexx
+Flex / Pod
+===================
+The library's goal is to facilitate the process of adding localization to iOS projects by providing an easy to use interface for getting and updating localization strings from an Upnetix internal or client hosted server.
 
-[![CI Status](https://img.shields.io/travis/nadezhdanikolova/PopupUpdate.svg?style=flat)](https://github.com/scalefocus/Flex-ios/)
-[![Version](https://img.shields.io/cocoapods/v/PopupUpdate.svg?style=flat)](https://cocoapods.org/pods/Flexx)
-[![License](https://img.shields.io/cocoapods/l/PopupUpdate.svg?style=flat)](https://cocoapods.org/pods/Flexx)
-[![Platform](https://img.shields.io/cocoapods/p/PopupUpdate.svg?style=flat)](https://cocoapods.org/pods/Flexx)
 
-The library's goal is to store and facilitate the proccess of adding string assets to iOS projects by providing an easy to use interface for getting and updating strings from a hosted server. This allows you to manage the strings from the web admin panel and update them in the live product, without the need of recompiling and releasing a new version of the app. The library also makes it easy to add a new translation to the app. Just add the new language strings in the admin panel and voilà - the users can already see and use the new language option.
+The library is divided into two modules. One module is open to the outside world and the other one is hidden. The modules are: **Main Service** and **Update Service**.
+The Job of the Main Service module is to provide easy to use functionality to get Strings for supported language.
+The Job of the Update Service module is to update strings of current language on regular bases.
 
-## Example
+----------
+Pod Installation
+-------------
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+In order to integrate the pod, you'll have to add 'Flex' to your Podfle.
 
-## Installation
-
-PopupUpdate is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod 'Flexx'
+You can add the Flex pod in a familiar way:
+```
+pod 'Flex'
 ```
 
-and don't forget to install the pod by running the following command in the terminal from the directory of your project:
-
+Now run this from the directory where your project is.
 ```
 pod install
 ```
+----------
+Library Integration
+-------------
+**IMPORTANT**:
 
-## Integration
+>Currently the library is working with HTTP and not HTTPS. Which means that you should add App Transport Security in order for updates to work. The domain to add is:
+http://localizer.upnetix.cloud/. Just add this to Info.plist: 
 
+```
+<key>NSAppTransportSecurity</key>
+<dict>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+</dict>
+```
+
+**Run Script:**
 You will need to add a run script to your project. For your convenience, the script is included in the pod.
 
 In your project - open Build Phases and add a new Run script with the following:
-
 ```
-chmod +x ./Pods/Flexx/Flexx/Classes/download_strings.sh
-././Pods/Flexx/Flexx/Classes/download_strings.sh
-```
-
->The first command chmod is for changing the permissions of script file. +x means that the file can be executed. For more commands see chmod documentation. The second line is the actual execution of the script. There the path to the script is specified as relative to the project root directory. If you want you can specity different path relative to the project root directory.
-
-
-Your next step will be to create a .plist file with the name "Configuration".
-After that fill the needed information. You can use the template from below.
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>AppId</key>
-	<string>Your App ID Here</string>
-	<key>BaseUrl</key>
-	<string>Base Url Here</string>
-	<key>Domains</key>
-	<array>
-		<string>Domain 1</string>
-		<string>Domain 2</string>
-	</array>
-	<key>Secret</key>
-	<string>Your App Secret Here</string>
-</dict>
-</plist>
-
+chmod +x ./Pods/Flex/localizer_download.sh
+././Pods/Flex/localizer_download.sh APP_ID="APP_ID" SALT="SALT" DOMAINS="DOMAIN1,DOMAIN2,DOMAIN3" BASE_URL="BASE_URL"
 ```
 
-AppId - identifier of the application.
+> **Note:** Base Url for development env.->
+- If using version 1.* -> http://localizer.upnetix.cloud/api/localizations/
+- if using version 2.* -> http://localizer.upnetix.cloud/api/localizations/v1.1
 
-BaseUrl - strings provider service url
+The first command **chmod** is for changing the permissions of script file. +x means that the file can be executed. For more commands see chmod documentation
+The second line is the actual execution of the script. There the path to the script is specified as relative to the project root directory. If you want you can specity different path relative to the project root directory.
 
-Secret - used for authentication for calls to the library (This is the secret used when creating the app in the console)
+**SCRIPT EXPLANATION**:
 
-Domains - these are all domain names
+***ZIP_FILE_NAME*** - name of the zip file, where at every build will be downloaded the latest version.
 
-After that all you need is to import Flexx:
+***APP_ID*** - This is the identifier of the application. You have passed it as an argument in the Run Script.
 
-```swift
-import Flexx
+***SALT*** - This is used for authentication for calls to the library. THIS IS THE SECRET USED WHEN CREATING THE APP IN THE CONSOLE. You have passed it as the <Secret> parameter in the Run Script.
+
+***DOMAINS*** - These are all domain names. You have to passed them separated with comma(",") in the Run Script.
+
+***BASE_URL*** - This is the strings provider service URL. You have to passed it as the <BASE_URL> parameter in the Run Script.
+
+FROM HERE ON THOSE SHOULD **NOT** BE CHAGED OR YOUR SCRIPT MIGHT MISBEHAVE.
+
+***AUTH_HEADER*** - this is hashed APP_ID + SALT String with SHA256 algorithm.
+curl command is used to make and http call.
+***-o*** is used to specify the destination of the of the file. Location where the file will be saved.
+***-H*** is used to specify a HEADER for the http call.
+Last is the http url where the resource is.
+Unzip command is used to unzip a file.
+First we specify the source location
+***-d*** is used to specify the destination where the zip contents will be unzipped.
+
+-------------
+
+Library Interface
+-------------
+
+Flex contains several methods. Some of them are mandatory and others are optional. You should use those that fit the needs of your application. Flex is a Singleton instance.
+
+**THIS IS MANDATORY**
+```
+initialize(locale: Locale, enableLogging: Bool? = false, defaultReturn: DefaultReturnBehavior = .empty, completed: (() -> Swift.Void)? = nil)
+```
+Initialization of Flex. This method should be called as early as possible like in AppDelegate's method **didFinishLaunchingWithOptions:**
+Parameters:
+
+- locale: the current device Locale.
+- enableLogging: bool that show if you want to have loggers for errors and messages
+- defaultReturn: desired behavior when no key found
+- completed: an optional callback when initialization process has finished.
+
+
+The Localizer instance **should be aware of the application's life cycle**.
+So in the corresponding AppDelegate methods, call these Localizer methods.
+
+```
+didEnterBackground()
+willEnterForeground()
+willTerminate()
 ```
 
-Flexx contains several methods. One of them is mandatory in order to use the library and others are optional.
+Optional Methods:
 
-Initialization of Flexx. This method should be called as early as possible like in AppDelegate's method **didFinishLaunchingWithOptions:**. This method is mandatory and should be called only once.
+```
+getString(key: String)
+```
+Retreives value from a key-value collection
 
-```swift
-  let locale = Locale(identifier: "en-GB")
-  Flexx.shared.initialize(locale: locale)
+- key: domain name + key of the string
+- returns: string value representing the value for the requested key
+- example: getString(key: "domainName.stringKey")
+
+```
+changeLocale(desiredLocale: Locale, changeCallback: Localizations.Localizer.ChangeLocaleCallback? = default)
+```
+Function which change loaded translations with those for the passed as argument Locale. This is to force reading another locale file.
+Parameters
+- desiredLocale: Locale instance.
+- changeCallback: callback when change of locale is completed no matter if it was successful
+
+```
+getAvailableLocales(withCompletion completion: @escaping ([Language]) -> Void)
 ```
 
-or you can use the extended init method:
-
-```swift
-  let locale = Locale(identifier: "en-GB")
-  Flexx.shared.initialize(locale: locale,
-                        	enableLogging: true,
-                            defaultLoggingReturn: .key,
-                            defaultUpdateInterval: 600000,
-                            completed: nil)
+```
+getCurrentLocale() -> Locale
 ```
 
-After the initialization you can get the string you need by calling this:
+-----------
 
-```swift
-	let myString = Flexx.shared.getString(domain: "Domain-name-here", key: "word-key-here")
+Usage
+-------------
+
+Here are some code snippets on how to use the library:
+Usage of
+
+```
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+	// Override point for customization after application launch.
+	Localizer.shared.initialize(locale: Locale.current, enableLogging: true, defaultReturn: Localizer.DefaultReturnBehavior.empty, completed: {
+		print("initialize callback")
+	})
+	// ... Other implementations
+	return true
+}
+
+```
+```
+textView.text = Localizer.shared.getString(key: "Domain.test_one")
+
 ```
 
-Here are the rest optional methods that you can use:
+```
+let locale = someBoolean ? "en" : "bg"
+Localizer.shared.changeLocale(desiredLocale: Locale.init(identifier: locale), changeCallback: {[weak self] (success, locale) in
+	print("Changed Locale was successful \(success) and current locale is \(locale)")
+	self?.textView.text = Localizer.shared.getString(key: "Domain.test_one")
+})
 
-Get current locale:
-```swift
-Flexx.shared.getCurrentLocale()
 ```
 
-Change current locale to desired locale:
-```swift
-Flexx.shared.changeLocale(desiredLocale: Locale(identifier: "en-GB"))
-```
 
-Get all available locales:
-```swift
- Flexx.shared.getAvailableLocales { languages, error  in
-            for language in languages {
-                print("LANGUAGE: \(language.code), \(language.name)")
-            }
-            if let error = error {
-                print("Error: \(error)")
-            }
-        }
-```
-
-## License
-
-Flexx is available under the MIT license. See the LICENSE file for more info.
