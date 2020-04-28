@@ -54,9 +54,6 @@ if curl -o "${SRCROOT}/${TARGET_NAME}/${ZIP_FILE_NAME}" -H "${AUTH_HEADER}" -v "
     echo "Localizations request is successful."
 else
     echo "Localizations request is NOT successful."
-    if [ "$CONFIGURATION" = "Release" ]; then
-        exit 1 # Meaning of exit codes: https://askubuntu.com/a/892605
-    fi
 fi
 
 # END REQUEST FOR LOCALIZATIONS
