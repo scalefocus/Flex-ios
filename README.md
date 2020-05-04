@@ -94,7 +94,7 @@ or you can use the extended init method:
   Flexx.shared.initialize(locale: locale,
                         	enableLogging: true,
                             defaultLoggingReturn: .key,
-                            defaultUpdateInterval: 600000,
+                            defaultUpdateInterval: 10,
                             completed: nil)
 ```
 
