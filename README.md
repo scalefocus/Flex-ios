@@ -39,6 +39,7 @@ CONFIG_FILE_PATH="${SRCROOT}/${TARGET_NAME}/FlexxConfig.plist"
 ```
 
 >The first command chmod is for changing the permissions of script file. +x means that the file can be executed. For more commands see chmod documentation. The second line is the actual execution of the script. There the path to the script is specified as relative to the project root directory. If you want you can specity different path relative to the project root directory.
+>CONFIG_FILE_PATH is used to specify the directory of the FlexxConfig.plist.
 
 
 Your next step will be to create a .plist file with the name "FlexxConfig".
