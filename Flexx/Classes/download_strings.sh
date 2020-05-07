@@ -30,10 +30,9 @@ BASE_URL=$(/usr/libexec/PlistBuddy -c "Print :BaseUrl" "${CONFIG_FILE_PATH}")
 DOMAINS=$(/usr/libexec/PlistBuddy -c "Print :Domains" "${CONFIG_FILE_PATH}")
 SHA_VALUE=$(printf ${APP_ID}${SECRET} | shasum -a 256 | cut -f1 -d" ")
 
-
 if grep -q "${SHA_VALUE}" "${CONFIG_FILE_PATH}"
 then
-    /usr/libexec/PlistBuddy -c "Set ShaValue ${SHA_VALUE}" "${CONFIG_FILE_PATH}"
+    /usr/libexec/PlistBuddy -c "Set ShaValue string ${SHA_VALUE}" "${CONFIG_FILE_PATH}"
 else
     /usr/libexec/PlistBuddy -c "Add ShaValue string ${SHA_VALUE}" "${CONFIG_FILE_PATH}"
 fi
