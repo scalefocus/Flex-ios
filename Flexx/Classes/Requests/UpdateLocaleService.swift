@@ -60,7 +60,8 @@ class UpdateLocaleService: RequestExecutor {
     
     private func startUpdateTimer() {
         timer = DispatchSource.makeTimerSource()
-        let intervalPeriod = DispatchTimeInterval.milliseconds(defaultUpdateInterval)
+        let updateIntervalInSeconds = defaultUpdateInterval*60
+        let intervalPeriod = DispatchTimeInterval.seconds(updateIntervalInSeconds)
         timer?.schedule(deadline: .now(), repeating: intervalPeriod)
         timer?.setEventHandler(handler: { [weak self] in
             self?.updateTranslationsRequest()

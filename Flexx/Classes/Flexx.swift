@@ -92,12 +92,12 @@ public class Flexx {
     ///   - locale: the current device locale.
     ///   - enableLogging: enabled if true. False by default.
     ///   - defaultLoggingReturn: desired behavior when no key found. Empty by default.
-    ///   - defaultUpdateInterval: interval time to check for update.
+    ///   - defaultUpdateInterval: interval time to check for update in minutes.
     ///   - completed: an optional callback when initialization process has finished.
     public func initialize(locale: Locale,
                            enableLogging: Bool = false,
                            defaultLoggingReturn: DefaultReturnBehavior = .empty,
-                           defaultUpdateInterval: Int = 600000,
+                           defaultUpdateInterval: Int = 10,
                            completed: (() -> Void)? = nil) {
         
         // Get configuration information from FlexxConfig.plist
