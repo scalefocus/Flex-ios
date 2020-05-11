@@ -33,7 +33,7 @@ SHA_VALUE=$(printf ${APP_ID}${SECRET} | shasum -a 256 | cut -f1 -d" ")
 
 if grep -q "${SHA_KEY_NAME}" "${CONFIG_FILE_PATH}"
 then
-    /usr/libexec/PlistBuddy -c "Set ${SHA_KEY_NAME} string ${SHA_VALUE}" "${CONFIG_FILE_PATH}"
+    /usr/libexec/PlistBuddy -c "Set ${SHA_KEY_NAME} ${SHA_VALUE}" "${CONFIG_FILE_PATH}"
 else
     /usr/libexec/PlistBuddy -c "Add ${SHA_KEY_NAME} string ${SHA_VALUE}" "${CONFIG_FILE_PATH}"
 fi
