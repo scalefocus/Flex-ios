@@ -144,6 +144,28 @@ class LocaleFileHandler {
         return fileContents
     }
     
+    static func getLocalFilesNames(domain: String) -> [String]{
+       do {
+            var localizationsDirectoryUrl = try getLocalizationsDirectory()
+        if !domain.isEmpty {
+                localizationsDirectoryUrl = localizationsDirectoryUrl.appendingPathComponent("\(domain)")
+            }
+            let documentsURL = localizationsDirectoryUrl
+            do {
+                let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+                let jsonFiles = directoryContents.filter{ $0.pathExtension == Constants.FileHandler.jsonFileExtension }
+                let jsonFileNames = jsonFiles.map{ $0.deletingPathExtension().lastPathComponent }
+                return jsonFileNames
+            } catch {
+                Logger.log(messageFormat:"\(documentsURL.path): \(error.localizedDescription)")
+        }
+        } catch let error {
+            Logger.log(messageFormat: error.localizedDescription)
+            Logger.log(messageFormat: Constants.FileHandler.readingLocaleZipFileErrorMessage, args: [domain])
+        }
+        return []
+    }
+    
     private static func readFile(at url: URL) throws -> Data {
         var fileContents: Data = Data()
         // Check if locale file exists

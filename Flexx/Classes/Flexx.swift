@@ -197,6 +197,11 @@ public class Flexx {
         }
         
         let localesContractor = LocalesContractor(configuration: configuration)
+        
+        
+        let langs = localesContractor.getLocalesFromZip(domain: configuration.domains.first)
+        
+        
         localesContractor.getLocales { languages in
             if languages.count == 0 {
                 completion(localesContractor.getStoredLocales(), Constants.LocalesContractor.errorRequestForGetLocales)
