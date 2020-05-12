@@ -40,23 +40,21 @@ class LocalesContractor: RequestExecutor {
         return []
     }
     
-    func getLocalesFromZip(domain: String?)-> [Language] {
-        if domain != nil && !(domain?.isEmpty ?? true) {
-            var languages = [Language]()
-            let localeNames = LocaleFileHandler.getLocaleFileNames(domain: domain!)
+    func getLocalesFromZip(domain: String)-> [Language] {
+        var languages = [Language]()
+        if !domain.isEmpty {
+            let localeNames = LocaleFileHandler.getLocaleFileNames(domain: domain)
             for locale in localeNames {
-                let language = Language(code: locale, name: countryName(countryCode: locale) ?? "")
+                let language = Language(code: locale, name: getCountryNameWith(countryCode: locale))
                 languages.append(language)
             }
-            return languages
-        } else {
-            return []
         }
+         return languages
     }
     
-    private func countryName(countryCode: String) -> String? {
+    private func getCountryNameWith(countryCode: String) -> String {
         let locale = Locale(identifier: "en_US")
-        return locale.localizedString(forRegionCode: countryCode)
+        return locale.localizedString(forRegionCode: countryCode) ?? ""
     }
     
     private func parseLanguagesResponse(data: Data?) -> [Language] {
