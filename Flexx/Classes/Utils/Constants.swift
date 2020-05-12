@@ -50,6 +50,7 @@ struct Constants {
         static let readingLocaleFileErrorMessage = "Error occured while reading %@. Will try to read backup file."
         static let readingLocaleZipFileErrorMessage = "Error occured while reading %@."
         static let zipFileVersionFileName = "project"
+        static let configFileName = "config"
     }
     
     struct UserDefaultKeys {

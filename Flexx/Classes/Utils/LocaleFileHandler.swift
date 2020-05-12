@@ -144,7 +144,7 @@ class LocaleFileHandler {
         return fileContents
     }
     
-    static func getLocalFilesNames(domain: String) -> [String]{
+    static func getLocaleFileNames(domain: String) -> [String]{
        do {
             var localizationsDirectoryUrl = try getLocalizationsDirectory()
         if !domain.isEmpty {
@@ -154,7 +154,9 @@ class LocaleFileHandler {
             do {
                 let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
                 let jsonFiles = directoryContents.filter{ $0.pathExtension == Constants.FileHandler.jsonFileExtension }
-                let jsonFileNames = jsonFiles.map{ $0.deletingPathExtension().lastPathComponent }
+                var jsonFileNames = jsonFiles.map{ $0.deletingPathExtension().lastPathComponent }
+                //exclude config file
+                jsonFileNames = jsonFileNames.filter{$0 != Constants.FileHandler.configFileName}
                 return jsonFileNames
             } catch {
                 Logger.log(messageFormat:"\(documentsURL.path): \(error.localizedDescription)")
