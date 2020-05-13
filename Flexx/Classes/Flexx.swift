@@ -201,10 +201,8 @@ public class Flexx {
         localesContractor.getLocales { languages in
             if languages.count == 0 {
                 Logger.log(messageFormat: Constants.LocalesContractor.errorRequestForGetLocales)
-                if let domain = configuration.domains.first {
-                    let langs = localesContractor.getLocalesFromZip(domain: domain)
-                    completion(langs, nil)
-                }
+                let langs = localesContractor.getLocalesFromZipWith(domains: configuration.domains)
+                completion(langs, nil)
                 return
             }
             completion(languages, nil)
