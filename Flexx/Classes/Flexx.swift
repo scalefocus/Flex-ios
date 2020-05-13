@@ -100,7 +100,7 @@ public class Flexx {
                            defaultUpdateInterval: Int = 10,
                            completed: (() -> Void)? = nil) {
         
-        // Get configuration information from Configuration.plist
+        // Get configuration information from FlexxConfig.plist
         guard let configurationInfo = readConfigurationPlist() else {
             Logger.log(messageFormat: Constants.Localizer.errorInitializingFlex)
             completed?()
@@ -350,10 +350,10 @@ public class Flexx {
         return localeFileName
     }
     
-    /// Read all properties from Configuration.plist
+    /// Read all properties from FlexxConfig.plist
     private func readConfigurationPlist() -> Configuration? {
         var configurationInfo: [String: Any]? = nil
-        if let url = Bundle.main.url(forResource:"Configuration", withExtension: "plist") {
+        if let url = Bundle.main.url(forResource:"FlexxConfig", withExtension: "plist") {
             do {
                 let data = try Data(contentsOf:url)
                 configurationInfo = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String:Any]

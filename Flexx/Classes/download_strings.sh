@@ -1,8 +1,21 @@
 ZIP_FILE_NAME="localizations.zip"
 REQUEST_PATH="/api/localizations/v1.1"
+SHA_KEY_NAME="ShaValue"
+
+for ARGUMENT in "$@"
+do
+KEY=$(echo $ARGUMENT | cut -f1 -d=)
+VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+case "$KEY" in
+CONFIG_FILE_PATH)              CONFIG_FILE_PATH=${VALUE} ;;
+*)
+esac
+done
+
 
 DOMAINS_PATTERN=","
 LOCALIZATION_DIRECTORY=${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Localizations
+
 
 if [ ! -d ${LOCALIZATION_DIRECTORY} ]; then
 mkdir -p ${LOCALIZATION_DIRECTORY}
@@ -12,17 +25,17 @@ if [ ! -d ${SRCROOT}/${TARGET_NAME} ]; then
 mkdir -p ${SRCROOT}/${TARGET_NAME}
 fi
 
-APP_ID=$(/usr/libexec/PlistBuddy -c "Print :AppId" "${SRCROOT}/${TARGET_NAME}/Configuration.plist")
-SECRET=$(/usr/libexec/PlistBuddy -c "Print :Secret" "${SRCROOT}/${TARGET_NAME}/Configuration.plist")
-BASE_URL=$(/usr/libexec/PlistBuddy -c "Print :BaseUrl" "${SRCROOT}/${TARGET_NAME}/Configuration.plist")
-DOMAINS=$(/usr/libexec/PlistBuddy -c "Print :Domains" "${SRCROOT}/${TARGET_NAME}/Configuration.plist")
+APP_ID=$(/usr/libexec/PlistBuddy -c "Print :AppId" "${CONFIG_FILE_PATH}")
+SECRET=$(/usr/libexec/PlistBuddy -c "Print :Secret" "${CONFIG_FILE_PATH}")
+BASE_URL=$(/usr/libexec/PlistBuddy -c "Print :BaseUrl" "${CONFIG_FILE_PATH}")
+DOMAINS=$(/usr/libexec/PlistBuddy -c "Print :Domains" "${CONFIG_FILE_PATH}")
 SHA_VALUE=$(printf ${APP_ID}${SECRET} | shasum -a 256 | cut -f1 -d" ")
 
-if grep -q "${SHA_VALUE}" "${SRCROOT}/${TARGET_NAME}/Configuration.plist"
+if grep -q "${SHA_KEY_NAME}" "${CONFIG_FILE_PATH}"
 then
-    /usr/libexec/PlistBuddy -c "Set ShaValue ${SHA_VALUE}" "${SRCROOT}/${TARGET_NAME}/Configuration.plist"
+    /usr/libexec/PlistBuddy -c "Set ${SHA_KEY_NAME} ${SHA_VALUE}" "${CONFIG_FILE_PATH}"
 else
-    /usr/libexec/PlistBuddy -c "Add ShaValue string ${SHA_VALUE}" "${SRCROOT}/${TARGET_NAME}/Configuration.plist"
+    /usr/libexec/PlistBuddy -c "Add ${SHA_KEY_NAME} string ${SHA_VALUE}" "${CONFIG_FILE_PATH}"
 fi
 
 # Get the domains between this symbols: {}
