@@ -23,7 +23,6 @@ class LocalesContractor: RequestExecutor {
                 
                 let languages = strongSelf.parseLanguagesResponse(data: data)
                 completion(languages)
-                strongSelf.storeLocales(languages: languages)
             }
         } else {
             requestErrorHandler.handleRequestCreationError()
@@ -31,28 +30,7 @@ class LocalesContractor: RequestExecutor {
         }
     }
     
-    func getStoredLocales()-> [Language] {
-        if let locales = UserDefaults.standard.data(forKey: "AvailableLanguages"),
-            let localesArr = try? JSONDecoder().decode([Language].self, from: locales) {
-            return localesArr
-        }
-        
-        return []
-    }
-    
-    func getLocalesFromZipWith(domains: [String]) -> [Language] {
-        var languagesDict = [String: Language]()
-        for domain in domains {
-            let languages = getLocalesFrom(domain: domain)
-            //filter dublicate lang codes
-            for language in languages {
-                languagesDict.updateValue(language, forKey: language.code)
-            }
-        }
-        return languagesDict.map { $0.value }
-    }
-    
-    private func getLocalesFrom(domain: String) -> [Language] {
+    func getLocalesFromZipWith(domain: String) -> [Language] {
         var languages: [Language] = []
         if !domain.isEmpty {
             let localeNames = LocaleFileHandler.getLocaleFileNames(domain: domain)
@@ -69,7 +47,7 @@ class LocalesContractor: RequestExecutor {
     
     private func getCountryNameWith(countryCode: String) -> String? {
         let locale = Locale(identifier: "en_US")
-        return locale.localizedString(forLanguageCode: countryCode)
+        return locale.localizedString(forIdentifier: countryCode)
     }
     
     private func parseLanguagesResponse(data: Data?) -> [Language] {
@@ -79,10 +57,5 @@ class LocalesContractor: RequestExecutor {
         let languages = try? jsonDecoder.decode([Language].self, from: data)
         
         return languages ?? []
-    }
-    
-    private func storeLocales(languages: [Language]) {
-        let allLanguages = try? JSONEncoder().encode(languages)
-        UserDefaults.standard.set(allLanguages, forKey: "AvailableLanguages")
     }
 }
