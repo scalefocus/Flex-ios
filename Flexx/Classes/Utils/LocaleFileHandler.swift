@@ -143,32 +143,22 @@ class LocaleFileHandler {
         }
         return fileContents
     }
-    
-    static func getLocaleFileNames(domain: String) -> [String] {
-        var jsonFileNames: [String] = []
+
+    /// method returns array of fine names in domain folder as String values
+    /// - Parameter domain: domain folder 
+    static func getFileNamesIn(domain: String) -> [String] {
+        guard !domain.isEmpty else { return [] } // when domain name is empty we don't have a domain therefore we don't have locale files and cannot continue.
         do {
-            var localizationsDirectoryUrl = try getLocalizationsDirectory()
-            if !domain.isEmpty {
-                localizationsDirectoryUrl = localizationsDirectoryUrl.appendingPathComponent("\(domain)")
-            }
-            jsonFileNames = getJsonFileNames(fromUrl: localizationsDirectoryUrl)
-        } catch let error {
+            let localizationsDirectoryUrl = try getLocalizationsDirectory().appendingPathComponent("\(domain)")
+            let directoryContents = try FileManager.default.contentsOfDirectory(at: localizationsDirectoryUrl, includingPropertiesForKeys: nil)
+            let jsonFiles = directoryContents.filter{ $0.pathExtension == Constants.FileHandler.jsonFileExtension }
+            return jsonFiles.map{ $0.deletingPathExtension().lastPathComponent }
+        }
+        catch {
             Logger.log(messageFormat: error.localizedDescription)
             Logger.log(messageFormat: Constants.FileHandler.readingLocaleZipFileErrorMessage, args: [domain])
+            return []
         }
-        return jsonFileNames
-    }
-    
-    private static func getJsonFileNames(fromUrl: URL) -> [String] {
-        var jsonFileNames: [String] = []
-        do {
-            let directoryContents = try FileManager.default.contentsOfDirectory(at: fromUrl, includingPropertiesForKeys: nil)
-            let jsonFiles = directoryContents.filter{ $0.pathExtension == Constants.FileHandler.jsonFileExtension }
-            jsonFileNames = jsonFiles.map{ $0.deletingPathExtension().lastPathComponent }
-        } catch {
-            Logger.log(messageFormat:"\(fromUrl.path): \(error.localizedDescription)")
-        }
-        return jsonFileNames
     }
     
     private static func readFile(at url: URL) throws -> Data {

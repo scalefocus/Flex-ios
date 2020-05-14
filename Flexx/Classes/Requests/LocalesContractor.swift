@@ -30,21 +30,21 @@ class LocalesContractor: RequestExecutor {
         }
     }
     
-    func getLocalesFromZipWith(domain: String) -> [Language] {
-        var languages: [Language] = []
-        if !domain.isEmpty {
-            let localeNames = LocaleFileHandler.getLocaleFileNames(domain: domain)
-            for locale in localeNames {
-                //don't create Language if name is not available
-                if let name = getCountryNameWith(countryCode: locale) {
-                    let language = Language(code: locale, name: name)
-                    languages.append(language)
-                }
-            }
+    /// method returns array of languages found in domain folder, if name of file is not valid language code it is skipped
+    /// - Parameter domain: domain folder
+    func getLocalesFromFiles(for domain: String?) -> [Language] {
+        guard let domainName = domain,
+            !domainName.isEmpty else { return [] }
+        let localeNames = LocaleFileHandler.getFileNamesIn(domain: domainName)
+        let languages: [Language] = localeNames.compactMap {
+            guard let langName = getCountryNameWith(countryCode: $0) else { return nil }
+            return Language(code: $0, name: langName)
         }
         return languages
     }
     
+    /// returns name of language as string
+    /// - Parameter countryCode: code of language
     private func getCountryNameWith(countryCode: String) -> String? {
         let locale = Locale(identifier: "en_US")
         return locale.localizedString(forIdentifier: countryCode)

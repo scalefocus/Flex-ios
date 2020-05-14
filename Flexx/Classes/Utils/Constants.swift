@@ -58,6 +58,7 @@ struct Constants {
     
     struct LocalesContractor {
         static let errorRequestForGetLocales = "Languages are loaded from User Defaults. Request for getting locales failed or return empty list of languages."
+        static let errorGetingLocalesFromFiles = "Languages can't be retrieved from local files."
         static let relativePath = "/api/locales"
         static let localizationsPath = "localizations"
     }
