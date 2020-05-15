@@ -19,7 +19,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         firstLabel.text = Flexx.shared.getString(domain: "Domain", key: "key")
         
-        //TODO: next line is for testing, remove before release 
         Flexx.shared.getAvailableLocales(withCompletion: { languages, error in
             
         })
