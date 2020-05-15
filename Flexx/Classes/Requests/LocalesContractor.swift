@@ -23,7 +23,6 @@ class LocalesContractor: RequestExecutor {
                 
                 let languages = strongSelf.parseLanguagesResponse(data: data)
                 completion(languages)
-                strongSelf.storeLocales(languages: languages)
             }
         } else {
             requestErrorHandler.handleRequestCreationError()
@@ -31,13 +30,25 @@ class LocalesContractor: RequestExecutor {
         }
     }
     
-    func getStoredLocales()-> [Language] {
-        if let locales = UserDefaults.standard.data(forKey: "AvailableLanguages"),
-            let localesArr = try? JSONDecoder().decode([Language].self, from: locales) {
-            return localesArr
+    /// This method returns an array of languages for the current domain(Note here that all domains have the same languages)
+    /// If the name of the file is not valid language code it is skipped
+    /// - Parameter domain: domain name
+    func getLocalesFromFiles(for domain: String?) -> [Language] {
+        guard let domainName = domain,
+            !domainName.isEmpty else { return [] }
+        let localeNames = LocaleFileHandler.getFilesNames(from: domainName)
+        let languages: [Language] = localeNames.compactMap {
+            guard let langName = getCountryNameWith(countryCode: $0) else { return nil }
+            return Language(code: $0, name: langName)
         }
-        
-        return []
+        return languages
+    }
+    
+    /// Returns the name of the language as string
+    /// - Parameter countryCode: code of language
+    private func getCountryNameWith(countryCode: String) -> String? {
+        let locale = Locale(identifier: "en_US")
+        return locale.localizedString(forIdentifier: countryCode)
     }
     
     private func parseLanguagesResponse(data: Data?) -> [Language] {
@@ -47,10 +58,5 @@ class LocalesContractor: RequestExecutor {
         let languages = try? jsonDecoder.decode([Language].self, from: data)
         
         return languages ?? []
-    }
-    
-    private func storeLocales(languages: [Language]) {
-        let allLanguages = try? JSONEncoder().encode(languages)
-        UserDefaults.standard.set(allLanguages, forKey: "AvailableLanguages")
     }
 }

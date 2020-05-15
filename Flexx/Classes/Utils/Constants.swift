@@ -48,6 +48,7 @@ struct Constants {
         static let jsonFileExtension = "json"
         static let localizationsPath = "Localizations"
         static let readingLocaleFileErrorMessage = "Error occured while reading %@. Will try to read backup file."
+        static let readingLocaleZipFileErrorMessage = "Error occured while reading %@."
         static let zipFileVersionFileName = "project"
     }
     
@@ -56,7 +57,8 @@ struct Constants {
     }
     
     struct LocalesContractor {
-        static let errorRequestForGetLocales = "Languages are loaded from User Defaults. Request for getting locales failed or return empty list of languages."
+        static let errorRequestForGetLocales = "Languages are loaded from local files. Request for getting locales failed or return empty list of languages."
+        static let errorGetingLocalesFromFiles = "Languages can't be retrieved from local files."
         static let relativePath = "/api/locales"
         static let localizationsPath = "localizations"
     }
