@@ -30,12 +30,13 @@ class LocalesContractor: RequestExecutor {
         }
     }
     
-    /// method returns array of languages found in domain folder, if name of file is not valid language code it is skipped
+    /// This method returns an array of languages for the current domain(Note here that all domains have the same languages)
+    /// If the name of the file is not valid language code it is skipped
     /// - Parameter domain: domain folder
     func getLocalesFromFiles(for domain: String?) -> [Language] {
         guard let domainName = domain,
             !domainName.isEmpty else { return [] }
-        let localeNames = LocaleFileHandler.getFileNamesIn(domain: domainName)
+        let localeNames = LocaleFileHandler.getFilesNames(from: domainName)
         let languages: [Language] = localeNames.compactMap {
             guard let langName = getCountryNameWith(countryCode: $0) else { return nil }
             return Language(code: $0, name: langName)
@@ -43,7 +44,7 @@ class LocalesContractor: RequestExecutor {
         return languages
     }
     
-    /// returns name of language as string
+    /// Returns the name of the language as string
     /// - Parameter countryCode: code of language
     private func getCountryNameWith(countryCode: String) -> String? {
         let locale = Locale(identifier: "en_US")

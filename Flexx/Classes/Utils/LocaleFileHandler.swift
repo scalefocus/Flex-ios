@@ -144,9 +144,9 @@ class LocaleFileHandler {
         return fileContents
     }
 
-    /// method returns array of fine names in domain folder as String values
-    /// - Parameter domain: domain folder 
-    static func getFileNamesIn(domain: String) -> [String] {
+    /// Method returns array of fine names for domain name as String values
+    /// - Parameter domain: domain name
+    static func getFilesNames(from domain: String) -> [String] {
         guard !domain.isEmpty else { return [] } // when domain name is empty we don't have a domain therefore we don't have locale files and cannot continue.
         do {
             let localizationsDirectoryUrl = try getLocalizationsDirectory().appendingPathComponent("\(domain)")
