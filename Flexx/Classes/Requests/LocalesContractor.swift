@@ -32,7 +32,7 @@ class LocalesContractor: RequestExecutor {
     
     /// This method returns an array of languages for the current domain(Note here that all domains have the same languages)
     /// If the name of the file is not valid language code it is skipped
-    /// - Parameter domain: domain folder
+    /// - Parameter domain: domain name
     func getLocalesFromFiles(for domain: String?) -> [Language] {
         guard let domainName = domain,
             !domainName.isEmpty else { return [] }
