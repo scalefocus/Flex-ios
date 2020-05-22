@@ -13,7 +13,7 @@ protocol UpdateTranslationsProtocol: class {
     
     func didUpdateDomainsVersions(domain: String, version: Int)
     
-    func getTranslationsForDomain(_ domain: String) -> [String: String]?
+    func getTranslationsForDomain(_ domain: String) -> [String: String]
     
     func getDomainsVersionsInfo() -> [String: Int]
 }
@@ -401,8 +401,8 @@ extension Flexx: UpdateTranslationsProtocol {
         storeDomainsVersions(domain: domain, version: version)
     }
     
-    func getTranslationsForDomain(_ domain: String) -> [String: String]? {
-        return threadSafeTranslations[domain] ?? nil
+    func getTranslationsForDomain(_ domain: String) -> [String: String] {
+        return threadSafeTranslations[domain] ?? [:]
     }
     
     func getDomainsVersionsInfo() -> [String: Int] {

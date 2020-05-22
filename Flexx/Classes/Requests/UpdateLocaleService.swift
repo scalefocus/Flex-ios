@@ -161,8 +161,9 @@ class UpdateLocaleService: RequestExecutor {
         }
         
         for domain in receivedScheme.domains {
-            guard let newTranslations = domain.translations,
-                var oldTranslations = updateTranslationsProtocol.getTranslationsForDomain(domain.domainId) else {
+            var oldTranslations = updateTranslationsProtocol.getTranslationsForDomain(domain.domainId)
+            guard let newTranslations = domain.translations
+            else {
                     Logger.log(messageFormat: Constants.UpdateLocaleService.couldNotUpdateTranslations)
                     return
             }
