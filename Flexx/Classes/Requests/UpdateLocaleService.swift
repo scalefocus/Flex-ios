@@ -160,10 +160,14 @@ class UpdateLocaleService: RequestExecutor {
             listOfWarnings.forEach { Logger.log(messageFormat: $0) }
         }
         
+        var newLocale = false
+        
         for domain in receivedScheme.domains {
+
             var oldTranslations = updateTranslationsProtocol.getTranslationsForDomain(domain.domainId)
+    
             guard let newTranslations = domain.translations
-            else {
+                else {
                     Logger.log(messageFormat: Constants.UpdateLocaleService.couldNotUpdateTranslations)
                     return
             }
@@ -186,20 +190,23 @@ class UpdateLocaleService: RequestExecutor {
             
             LocaleFileHandler.writeToFile(fileName: receivedScheme.locale,
                                           data: encodedTranslationData,
-                                          domain: domain.domainId) { [weak self] success in
+                                          domain: domain.domainId) { [weak self] success, newLocaleFile in
                                             guard let strongSelf = self else { return }
+                                            newLocale = newLocaleFile
                                             if success {
                                                 Logger.log(messageFormat: Constants.UpdateLocaleService.successfulUpdate, args: [receivedScheme.locale])
                                                 strongSelf.updateTranslationsProtocol.didUpdateTranslations(domain: domain.domainId,
                                                                                                             translations: oldTranslations)
                                                 strongSelf.updateTranslationsProtocol.didUpdateDomainsVersions(domain: domain.domainId,
                                                                                                                version: domain.version)
+                                                
                                                 strongSelf.setupUpdateService(locale: receivedScheme.locale)
                                             } else {
                                                 Logger.log(messageFormat: Constants.UpdateLocaleService.couldNotUpdateTranslations)
                                             }
             }
         }
+        self.updateTranslationsProtocol.didUpdateTranslations(for: receivedScheme.locale, newLocale: newLocale)
     }
     
     deinit {

@@ -201,15 +201,16 @@ class LocaleFileHandler {
         return fileContents
     }
     
-    static func writeToFile(fileName: String, data: Data, domain: String, callback: ((Bool) -> Void)? ) {
+    static func writeToFile(fileName: String, data: Data, domain: String, callback: ((Bool, Bool) -> Void)? ) {
         DispatchQueue.global(qos: .background).sync {
             do {
                 let localizationsDirectory = try getLocalizationsDirectory().appendingPathComponent("/\(domain)")
-                try writeDataToFile(in: localizationsDirectory, fileName: fileName, fileExtension: Constants.FileHandler.jsonFileExtension, contents: data)
-                callback?(true)
+                let newLocaleFile = try writeDataToFile(in: localizationsDirectory, fileName: fileName, fileExtension: Constants.FileHandler.jsonFileExtension, contents: data)
+                // first param - is writing to file successful, second - is new file created/new language added
+                callback?(true, newLocaleFile)
             } catch let error {
                 Logger.log(messageFormat: error.localizedDescription)
-                callback?(false)
+                callback?(false, false)
             }
         }
     }
@@ -232,7 +233,15 @@ class LocaleFileHandler {
         return localizationsDirectoryUrl
     }
     
-    private static func writeDataToFile(in directory: URL, fileName: String, fileExtension: String, contents: Data) throws {
+    
+    /// write data to file, return true if new locale file is created, this means new language is added
+    /// - Parameters:
+    ///   - directory: url to file
+    ///   - fileName: filename
+    ///   - fileExtension: ectention
+    ///   - contents:content of file
+    private static func writeDataToFile(in directory: URL, fileName: String, fileExtension: String, contents: Data) throws -> Bool{
+        var newFileCreated = true
         
         let currentLocaleFile = directory
             .appendingPathComponent(fileName)
@@ -251,9 +260,14 @@ class LocaleFileHandler {
         if FileManager.default.fileExists(atPath: currentLocaleFile.path) {
             // remove file with fileName
             try FileManager.default.removeItem(at: currentLocaleFile)
+            // mark creation of new file as false, file already exists
+            newFileCreated = false
         }
         // rename tmp file
         try FileManager.default.moveItem(at: tmpFileUrl, to: currentLocaleFile)
+        
+        //return if new file for locale is created
+        return newFileCreated
     }
     
     /**

@@ -11,6 +11,8 @@ import Foundation
 protocol UpdateTranslationsProtocol: class {
     func didUpdateTranslations(domain: String, translations: [String: String])
     
+    func didUpdateTranslations(for locale: String, newLocale: Bool)
+    
     func didUpdateDomainsVersions(domain: String, version: Int)
     
     func getTranslationsForDomain(_ domain: String) -> [String: String]
@@ -47,6 +49,8 @@ public class Flexx {
     /// The first string is the Domain name and it holds dictionary of [String: String]
     /// which are the transactions for the current domain
     private var translations: [String: [String: String]] = [:]
+    
+    private var changeLocaleCallback: (() -> Void)?
     
     /// Synchronizing the access to the translations since it may appear
     /// simultaneously from multiple threads
@@ -181,6 +185,7 @@ public class Flexx {
         updateService?.startUpdateService(locale: localeFileName(locale: desiredLocale))
         
         Logger.log(messageFormat: "Locale is change to %@", args: [localeFileName(locale: currentLocale)])
+        changeLocaleCallback = completed
         completed?()
     }
     
@@ -392,6 +397,24 @@ public class Flexx {
 
 // MARK: UpdateTranslationsProtocol
 extension Flexx: UpdateTranslationsProtocol {
+    
+
+    /// - Parameters:
+    ///   - locale: locale for update
+    ///   - newLocale: bool flag, true if new locale file is created, it means new language is added
+    /// called after all domains for locale are updated
+    /// if new locale file  is created after updates current locale is switched to new locale
+    /// method calls changelocale callback after update to set newest strings
+    func didUpdateTranslations(for locale: String, newLocale: Bool) {
+        DispatchQueue.main.async {
+            if newLocale {
+                self.currentLocale = Locale(identifier: locale)
+                Logger.log(messageFormat: "Locale is change to %@", args: [self.localeFileName(locale: self.currentLocale)])
+            }
+            self.changeLocaleCallback?()
+            self.changeLocaleCallback = nil
+        }
+    }
     
     func didUpdateTranslations(domain: String, translations: [String: String]) {
         storeTranslations(domain: domain, translations: translations)
