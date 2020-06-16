@@ -238,8 +238,8 @@ class LocaleFileHandler {
     /// - Parameters:
     ///   - directory: url to file
     ///   - fileName: filename
-    ///   - fileExtension: ectention
-    ///   - contents:content of file
+    ///   - fileExtension: extension
+    ///   - contents:contents of the file
     private static func writeDataToFile(in directory: URL, fileName: String, fileExtension: String, contents: Data) throws {
         let currentLocaleFile = directory
             .appendingPathComponent(fileName)

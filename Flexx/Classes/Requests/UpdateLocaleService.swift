@@ -31,7 +31,7 @@ class UpdateLocaleService: RequestExecutor {
         super.init(configuration: configuration)
     }
     
-    func startUpdateService(locale: String, completed: (() -> Void)? = nil) {
+    func startUpdateService(locale: String) {
         setupUpdateService(locale: locale)
         
         guard let updateScheme = updateScheme else {
@@ -48,7 +48,7 @@ class UpdateLocaleService: RequestExecutor {
             return
         }
         
-        startUpdateTimer(completed: completed)
+        startUpdateTimer()
     }
     
     func stopUpdateService() {
@@ -64,7 +64,7 @@ class UpdateLocaleService: RequestExecutor {
         let intervalPeriod = DispatchTimeInterval.seconds(updateIntervalInSeconds)
         timer?.schedule(deadline: .now(), repeating: intervalPeriod)
         timer?.setEventHandler(handler: { [weak self] in
-            self?.updateTranslationsRequest(completed: completed)
+            self?.updateTranslationsRequest()
         })
         timer?.resume()
     }
@@ -74,7 +74,7 @@ class UpdateLocaleService: RequestExecutor {
         timer = nil
     }
     
-    private func updateTranslationsRequest(completed: (() -> Void)? = nil) {
+    private func updateTranslationsRequest() {
         defer {
             updateFinished()
         }
@@ -93,18 +93,18 @@ class UpdateLocaleService: RequestExecutor {
                 let data = data,
                 strongSelf.serviceState == .running else { return }
             
-            strongSelf.decodeTranslationsScheme(data: data, completed: completed)
+            strongSelf.decodeTranslationsScheme(data: data)
         }
     }
     
-    private func decodeTranslationsScheme(data: Data, completed: (() -> Void)? = nil) {
+    private func decodeTranslationsScheme(data: Data) {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         do {
             let decodedScheme = try decoder.decode(UpdateTranslationsScheme.self, from: data)
             if !decodedScheme.domains.isEmpty {
-                updateLocaleTranslations(receivedScheme: decodedScheme, completed: completed)
+                updateLocaleTranslations(receivedScheme: decodedScheme)
             } else {
                 Logger.log(messageFormat: Constants.UpdateLocaleService.emptyTranslations)
             }
@@ -155,7 +155,7 @@ class UpdateLocaleService: RequestExecutor {
         setValueForTranslationsScheme(domains: domains, locale: locale)
     }
     
-    private func updateLocaleTranslations(receivedScheme: UpdateTranslationsScheme, completed: (() -> Void)? = nil) {
+    private func updateLocaleTranslations(receivedScheme: UpdateTranslationsScheme) {
         if let listOfWarnings = receivedScheme.warnings {
             listOfWarnings.forEach { Logger.log(messageFormat: $0) }
         }
@@ -203,7 +203,6 @@ class UpdateLocaleService: RequestExecutor {
                                             }
             }
         }
-        completed?()
     }
     
     deinit {

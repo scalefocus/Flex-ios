@@ -48,8 +48,6 @@ public class Flexx {
     /// which are the transactions for the current domain
     private var translations: [String: [String: String]] = [:]
     
-    private var changeLocaleCallback: (() -> Void)?
-    
     /// Synchronizing the access to the translations since it may appear
     /// simultaneously from multiple threads
     private var threadSafeTranslations: [String: [String: String]] {
@@ -180,17 +178,9 @@ public class Flexx {
         currentLocale = desiredLocale
         
         handleLocaleSynchronicallyForDomains(configuration.domains, locale: desiredLocale)
-        updateService?.startUpdateService(locale: localeFileName(locale: desiredLocale), completed: {[desiredLocale, weak self] in
-            if desiredLocale != self?.currentLocale {
-                self?.currentLocale = desiredLocale
-                Logger.log(messageFormat: "Locale is change to %@", args: [(self?.localeFileName(locale: desiredLocale) ?? "")])
-                DispatchQueue.main.async {
-                    completed?()
-                }
-            }
-        })
+        updateService?.startUpdateService(locale: localeFileName(locale: desiredLocale))
         
-        Logger.log(messageFormat: "Locale is change to %@", args: [localeFileName(locale: currentLocale)])
+        Logger.log(messageFormat: "Locale is changed to %@", args: [localeFileName(locale: currentLocale)])
         completed?()
     }
     
@@ -308,6 +298,8 @@ public class Flexx {
             storeDomainsVersions(domain: localeTranslations.domainId, version: localeTranslations.version)
         }
         catch let error {
+            // If there is a problem decoding the file, set domain and version as 0 to force-update the contents of the file
+            storeDomainsVersions(domain: domain, version: 0)
             Logger.log(messageFormat: error.localizedDescription)
             Logger.log(messageFormat: Constants.Localizer.localeFileParsingError, args: [fileName])
         }
