@@ -31,6 +31,10 @@ class UpdateLocaleService: RequestExecutor {
         super.init(configuration: configuration)
     }
     
+    func updateTranslations(completion: ((Data) -> Void)? = nil) {
+        updateTranslationsRequest(completion: completion)
+    }
+    
     func startUpdateService(locale: String) {
         setupUpdateService(locale: locale)
         
@@ -58,7 +62,7 @@ class UpdateLocaleService: RequestExecutor {
         stopUpdateTimer()
     }
     
-    private func startUpdateTimer(completed: (() -> Void)? = nil) {
+    private func startUpdateTimer() {
         timer = DispatchSource.makeTimerSource()
         let updateIntervalInSeconds = defaultUpdateInterval*60
         let intervalPeriod = DispatchTimeInterval.seconds(updateIntervalInSeconds)
@@ -74,7 +78,7 @@ class UpdateLocaleService: RequestExecutor {
         timer = nil
     }
     
-    private func updateTranslationsRequest() {
+    private func updateTranslationsRequest(completion: ((Data) -> Void)? = nil) {
         defer {
             updateFinished()
         }
@@ -89,11 +93,13 @@ class UpdateLocaleService: RequestExecutor {
         let dataForPostRequest = try? encoder.encode(scheme)
         
         self.execute(url: url, method: Method.post, data: dataForPostRequest) { [weak self] data in
+                                print("------------------------------------------------------------ GUARDING COMING ------------------------------------------------------------")
             guard let strongSelf = self,
                 let data = data,
                 strongSelf.serviceState == .running else { return }
-            
+                                print("------------------------------------------------------------ GUARD COMPLETED DATA RECEIVED ------------------------------------------------------------")
             strongSelf.decodeTranslationsScheme(data: data)
+            completion?(data)
         }
     }
     

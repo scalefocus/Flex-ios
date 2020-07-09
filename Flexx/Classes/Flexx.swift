@@ -256,25 +256,39 @@ public class Flexx {
     /// Read locale file that contains the transactions.
     ///
     /// First we try to read locale file, if the file is empty we try
-    /// to read backup file. If backup file is empty we switch the locale
-    /// to default locale and read the backup file for it.
+    /// to read backup file. If backup file is empty we start a update,
+    /// if the update fails switch to default locale and read the backup file for it.
     private func readLocaleFile(fileName: String, domain: String) -> Data {
         var fileContent: Data
         
+        // Read local file
         fileContent = LocaleFileHandler.readLocaleFile(filename: fileName, domain: domain)
         
+        // Read backup file if local is empty
         if fileContent.isEmpty {
             Logger.log(messageFormat: Constants.Localizer.emptyLocaleFileError, args: [fileName])
             fileContent = LocaleFileHandler.readBackupFile(filename: fileName, domain: domain)
         }
         
         if fileContent.isEmpty {
-            Logger.log(messageFormat: Constants.Localizer.emptyLocaleBackupFileError, args: [fileName])
-            Logger.log(messageFormat: Constants.Localizer.changedToDefaultLocale, args: [defaultLocaleFileName])
-            fileContent = LocaleFileHandler.readBackupFile(filename: defaultLocaleFileName, domain: domain)
-            currentLocale = Locale(identifier: defaultLocaleFileName)
+            // Try to update if the backup and local files are empty
+            updateService?.updateTranslations { [weak self] data in
+                guard let strongSelf = self else { return }
+                if !data.isEmpty {
+                    fileContent = LocaleFileHandler.readLocaleFile(filename: fileName, domain: domain)
+                    print("------------------------------------------------------------ REQUEST COMPLETED ------------------------------------------------------------")
+                                        print("------------------------------------------------------------ REQUEST COMPLETED ------------------------------------------------------------")
+                                        print("------------------------------------------------------------ REQUEST COMPLETED ------------------------------------------------------------")
+                                        print("------------------------------------------------------------ REQUEST COMPLETED ------------------------------------------------------------")
+                    return
+                } else {
+                    Logger.log(messageFormat: Constants.Localizer.emptyLocaleBackupFileError, args: [fileName])
+                    Logger.log(messageFormat: Constants.Localizer.changedToDefaultLocale, args: [strongSelf.defaultLocaleFileName])
+                    fileContent = LocaleFileHandler.readBackupFile(filename: strongSelf.defaultLocaleFileName, domain: domain)
+                    strongSelf.currentLocale = Locale(identifier: strongSelf.defaultLocaleFileName)
+                }
+            }
         }
-        
         return fileContent
     }
     
@@ -285,7 +299,7 @@ public class Flexx {
     /// - parameter domain: Domain name
     private func handleLocale(fileName: String, domain: String) {
         // 1. Read locale file
-        let localeData = readLocaleFile(fileName: fileName, domain: domain)
+        var localeData = readLocaleFile(fileName: fileName, domain: domain)
         
         // 2. Parse translations to Locale
         let decoder = JSONDecoder()

@@ -206,7 +206,6 @@ class LocaleFileHandler {
             do {
                 let localizationsDirectory = try getLocalizationsDirectory().appendingPathComponent("/\(domain)")
                 try writeDataToFile(in: localizationsDirectory, fileName: fileName, fileExtension: Constants.FileHandler.jsonFileExtension, contents: data)
-                // first param - is writing to file successful, second - is new file created/new language added
                 callback?(true)
             } catch let error {
                 Logger.log(messageFormat: error.localizedDescription)
