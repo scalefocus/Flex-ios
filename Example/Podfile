@@ -3,8 +3,10 @@ platform :ios, '9.3'
   
 target 'UpnetixLocalizerDemo' do
     pod 'Flexx', :path => '../'
+
+    target 'UpnetixLocalizer_Tests' do
+        inherit! :search_paths
+    end
 end
 
-target 'UpnetixLocalizerDemoSecondTarget' do
-  pod 'Flexx', :path => '../'
-end
+
