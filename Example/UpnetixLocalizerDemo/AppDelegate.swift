@@ -14,6 +14,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        // Prevent setup Flexx during unit tests
+        #if DEBUG
+            guard !TestHelper.isRunningTests else {
+                return true
+            }
+        #endif // DEBUG
         
         let locale = Locale(identifier: "en-GB")
         Flexx.shared.initialize(locale: locale,

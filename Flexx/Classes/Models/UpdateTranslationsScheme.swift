@@ -10,16 +10,29 @@ struct UpdateTranslationsScheme: Codable {
     /// The Unique Identifier of the application
     let appId: String
     /// Locale code
-    var locale: String
+    let locale: String
     /// List of domains that keep translations
-    var domains: [Domain]
+    let domains: [Domain]
     /// Update Interval in milliseconds
-    let updateInterval: Int? = nil
+    let updateInterval: Int?
     /// Warnings list received in response from backend when updating locales
-    let warnings: [String]? = nil
+    let warnings: [String]?
+
+    init(appId: String,
+         locale: String,
+         domains: [Domain],
+         updateInterval: Int? = nil,
+         warnings: [String]? = nil) {
+        self.appId = appId
+        self.locale = locale
+        self.domains = domains
+        self.updateInterval = updateInterval
+        self.warnings = warnings
+    }
 }
 
-// MARK: Equatable extension
+// MARK: - Equatable extension
+
 extension UpdateTranslationsScheme: Equatable {
     static func == (left: UpdateTranslationsScheme, right: UpdateTranslationsScheme) -> Bool {
         return left.appId == right.appId

@@ -10,7 +10,11 @@
 		17204E17A3AB4414C679307AE50C2B44 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8C9CB01DD90D82C2B40F50D9E8141 /* Language.swift */; };
 		18FF5FA9224A506C94272501AE0D4EB1 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AAF0C4D5BB10C4FA7DB71BEFD5F4E8 /* Config.swift */; };
 		2F507E6D1BDE0816B3B58E0A96CDEE12 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B058B433CB9D0C4B8072AB175455C28B /* Extensions.swift */; };
+		41A6CCD92514E8420009847E /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A6CCD82514E8420009847E /* SettingsService.swift */; };
+		41A6CCDE2514E84E0009847E /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A6CCDD2514E84E0009847E /* FileService.swift */; };
 		41B574B26FA66FA00327FF02EEFEDF8E /* Domain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636ECBA0DF98C2C6EA68013139DA00B /* Domain.swift */; };
+		41CE3E3925188D1D006588A7 /* BundleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CE3E3825188D1D006588A7 /* BundleService.swift */; };
+		41CE3E4425189EBE006588A7 /* download_strings.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2ECA4E30DCEF2AD7F398BF614AFAACEE /* download_strings.sh */; };
 		4AE459AFAF6C104848DA4F6B6060E753 /* UpdateTranslationsScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB65C84F9EA1C977709472F26EC6FB87 /* UpdateTranslationsScheme.swift */; };
 		5371669EC94D00E2066576AC78B72EFE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		53ED7DAB50D45F58BA3A0240B28CD5D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
@@ -25,7 +29,6 @@
 		9D0B51C8A7A3ED23518FFFA154C932B8 /* Flexx-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD0F9975855E54845AA62F319170147 /* Flexx-dummy.m */; };
 		A2679D596931D01B0257414174C0E1E5 /* Pods-UpnetixLocalizer_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FC97C628034045FDE94D353261948C /* Pods-UpnetixLocalizer_Tests-dummy.m */; };
 		B2C06A03DD8C729099A5294583BE58B6 /* LocaleFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C52E3520CBEC42B08510D8CBAF8292 /* LocaleFileHandler.swift */; };
-		B9D843734FD607C578199C238EC56FCF /* download_strings.sh in Sources */ = {isa = PBXBuildFile; fileRef = 2ECA4E30DCEF2AD7F398BF614AFAACEE /* download_strings.sh */; };
 		C1D6F51F116D0A0B7F7E544DEC021FD7 /* Pods-UpnetixLocalizer_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 51DF778D2ED569878F49350E397D4A40 /* Pods-UpnetixLocalizer_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C8AF6FF1C836E3A540D190667DCFD38C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F24D26DFE2935217188534D2CD7E9A /* Constants.swift */; };
 		D4AC41CBE536B0C48088DBCA5119754B /* Flexx-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 924445083C812FD6CF614FEA374DFA46 /* Flexx-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,7 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		001F72EC1BDA361998695B24221A74BC /* Pods_UpnetixLocalizer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_UpnetixLocalizer_Tests.framework; path = "Pods-UpnetixLocalizer_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		001F72EC1BDA361998695B24221A74BC /* Pods_UpnetixLocalizer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpnetixLocalizer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01DB60E657757B5473A79FAAFF22F9CA /* Flexx.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Flexx.modulemap; sourceTree = "<group>"; };
 		0F8B95B2282710B9AB2DE1A8AD4F64AB /* LocaleFileHandlerError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LocaleFileHandlerError.swift; sourceTree = "<group>"; };
 		148D67ABDE2631938A42D9FF80842E64 /* Pods-UpnetixLocalizerDemo.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-UpnetixLocalizerDemo.modulemap"; sourceTree = "<group>"; };
@@ -69,7 +72,10 @@
 		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3EB8C9CB01DD90D82C2B40F50D9E8141 /* Language.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		414E25993ECFDDEB52F32975743551F6 /* Flexx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Flexx.debug.xcconfig; sourceTree = "<group>"; };
-		4BFC5D5B1A62173613B55F05547B1F27 /* Pods_UpnetixLocalizerDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_UpnetixLocalizerDemo.framework; path = "Pods-UpnetixLocalizerDemo.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		41A6CCD82514E8420009847E /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
+		41A6CCDD2514E84E0009847E /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
+		41CE3E3825188D1D006588A7 /* BundleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleService.swift; sourceTree = "<group>"; };
+		4BFC5D5B1A62173613B55F05547B1F27 /* Pods_UpnetixLocalizerDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpnetixLocalizerDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51DF778D2ED569878F49350E397D4A40 /* Pods-UpnetixLocalizer_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-UpnetixLocalizer_Tests-umbrella.h"; sourceTree = "<group>"; };
 		5E8690DE168025BEDD2EECCF7AA7041B /* Pods-UpnetixLocalizer_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UpnetixLocalizer_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		614C89A35283A67CDA8410E8B94956F0 /* Flexx.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Flexx.swift; path = Flexx/Classes/Flexx.swift; sourceTree = "<group>"; };
@@ -86,23 +92,23 @@
 		924445083C812FD6CF614FEA374DFA46 /* Flexx-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Flexx-umbrella.h"; sourceTree = "<group>"; };
 		92FBA16A56E78761C4D538E303EFABAE /* Flexx-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Flexx-Info.plist"; sourceTree = "<group>"; };
 		958AD08ED724E7E4C253DB80AF0B45C0 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F234045FCE0FC1C8AEE28D25581FC65 /* Pods-UpnetixLocalizerDemo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-UpnetixLocalizerDemo-acknowledgements.markdown"; sourceTree = "<group>"; };
 		9F590E80EFF25B98B9A8A722D815230C /* Pods-UpnetixLocalizerDemo-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UpnetixLocalizerDemo-acknowledgements.plist"; sourceTree = "<group>"; };
 		9F8B4012F4AA9C0F9E076CEE63B2BD21 /* Pods-UpnetixLocalizerDemo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-UpnetixLocalizerDemo-dummy.m"; sourceTree = "<group>"; };
 		A6F24D26DFE2935217188534D2CD7E9A /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A74B726E307CA46EE1BFA293FBDB3C7B /* Pods-UpnetixLocalizerDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UpnetixLocalizerDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		AB18C8467764A29E658C9928B484F4FA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		AF16471885F62303CCF9D5A089FF2BBE /* Flexx.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = Flexx.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AB18C8467764A29E658C9928B484F4FA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		AF16471885F62303CCF9D5A089FF2BBE /* Flexx.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = Flexx.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B058B433CB9D0C4B8072AB175455C28B /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		B5C9B4B19F0086A8ACDD35849D902966 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		B5C9B4B19F0086A8ACDD35849D902966 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BBDAF354EF727C3C700D1CAC372C3428 /* Pods-UpnetixLocalizerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UpnetixLocalizerDemo.release.xcconfig"; sourceTree = "<group>"; };
 		BC12C078361AD5BA74499BA55D13522F /* Pods-UpnetixLocalizer_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UpnetixLocalizer_Tests-Info.plist"; sourceTree = "<group>"; };
 		CEB9AD5547D903B138FF85B7F8006353 /* Configuration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		DFD0757768479D71556CFD213B7232F5 /* Pods-UpnetixLocalizer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UpnetixLocalizer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		E3CC73FD605EBE4011CDFB686550E30C /* DefaultReturnBehavior.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultReturnBehavior.swift; sourceTree = "<group>"; };
 		EB65C84F9EA1C977709472F26EC6FB87 /* UpdateTranslationsScheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UpdateTranslationsScheme.swift; sourceTree = "<group>"; };
-		EBB15BCE9CC8597F2C22B43A82B2AC9C /* Flexx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Flexx.framework; path = Flexx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBB15BCE9CC8597F2C22B43A82B2AC9C /* Flexx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Flexx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECCDCF60CFB92EC38CABFAA66C80417F /* Pods-UpnetixLocalizerDemo-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UpnetixLocalizerDemo-Info.plist"; sourceTree = "<group>"; };
 		EDAA33BE2533D420EFF581BA19A6719C /* Pods-UpnetixLocalizer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UpnetixLocalizer_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		EDB983F282C2B3EA00585929834F9C34 /* Pods-UpnetixLocalizer_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-UpnetixLocalizer_Tests.modulemap"; sourceTree = "<group>"; };
@@ -198,6 +204,16 @@
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
+		41A6CCD72514E82C0009847E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				41A6CCD82514E8420009847E /* SettingsService.swift */,
+				41A6CCDD2514E84E0009847E /* FileService.swift */,
+				41CE3E3825188D1D006588A7 /* BundleService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		505636B1F08D51738E4F28173B16BE81 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,6 +307,7 @@
 				341AC2E8C473417D25FD143861805156 /* Pod */,
 				2DB6B43CF537E67C3A1D2BE8BCE12EB6 /* Requests */,
 				A022A35E6C881FFA930A0C05A79494F3 /* Support Files */,
+				41A6CCD72514E82C0009847E /* Services */,
 				24CF4AFB11E82E31F2438136CF2F154B /* Utils */,
 			);
 			name = Flexx;
@@ -436,6 +453,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41CE3E4425189EBE006588A7 /* download_strings.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,11 +487,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				18FF5FA9224A506C94272501AE0D4EB1 /* Config.swift in Sources */,
+				41CE3E3925188D1D006588A7 /* BundleService.swift in Sources */,
 				911F13ECE319B24C2D07432EB03BC4AD /* Configuration.swift in Sources */,
 				C8AF6FF1C836E3A540D190667DCFD38C /* Constants.swift in Sources */,
 				E9E3003B6C063C39B17B7566D64D0595 /* DefaultReturnBehavior.swift in Sources */,
 				41B574B26FA66FA00327FF02EEFEDF8E /* Domain.swift in Sources */,
-				B9D843734FD607C578199C238EC56FCF /* download_strings.sh in Sources */,
+				41A6CCDE2514E84E0009847E /* FileService.swift in Sources */,
 				2F507E6D1BDE0816B3B58E0A96CDEE12 /* Extensions.swift in Sources */,
 				9D0B51C8A7A3ED23518FFFA154C932B8 /* Flexx-dummy.m in Sources */,
 				75D61AF24BD5046AC06C49974D679479 /* Flexx.swift in Sources */,
@@ -488,6 +507,7 @@
 				D5077BC814CC996BA3A230F2F677C182 /* RequestExecutor.swift in Sources */,
 				8B8AD0797C8F49C3AFB2EF8A7BA3FBD9 /* UniqueQueue.swift in Sources */,
 				D585A195725E8E47C6BDC5BED0DB071E /* UpdateLocaleService.swift in Sources */,
+				41A6CCD92514E8420009847E /* SettingsService.swift in Sources */,
 				4AE459AFAF6C104848DA4F6B6060E753 /* UpdateTranslationsScheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -737,8 +757,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};

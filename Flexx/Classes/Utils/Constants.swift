@@ -50,6 +50,18 @@ struct Constants {
         static let readingLocaleFileErrorMessage = "Error occured while reading %@. Will try to read backup file."
         static let readingLocaleZipFileErrorMessage = "Error occured while reading %@."
         static let zipFileVersionFileName = "project"
+        static let readingBackupFileErrorMessage = "Error occured while reading backup file."
+        static let readingLocaleFileNamesErrorMessage = "Error occured while reading locale file names for domain: %@."
+    }
+
+    struct FileService {
+        static let directoryNotFound = "Directory not found: %@."
+        static let fileNotFound = "File not found: %@."
+        static let readingFile = "Can not read file %@."
+        static let createTmpFile = "Can not create temp file %@"
+        static let applicationSupportDirectoryNotFound = "Application Support Directory not found"
+
+        static let tempFileNameSuffix = "_tmp"
     }
     
     struct UserDefaultKeys {
@@ -67,5 +79,9 @@ struct Constants {
         static let authHeader = "X-Authorization"
         static let contentTypeHeader = "Content-Type"
         static let contentTypeValue = "application/json"
+    }
+
+    struct JSONConfigKey {
+        static let projectVersion = "project_version"
     }
 }

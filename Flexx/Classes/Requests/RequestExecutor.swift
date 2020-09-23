@@ -7,6 +7,9 @@
 
 import Foundation
 
+// TODO: Add Protocol, Refactor, Unit Tests
+// TODO: Inject RequestErrorHandler
+// TODO: Make it final class
 class RequestExecutor {
     let configuration: Configuration
     let requestErrorHandler = RequestErrorHandler()
@@ -25,8 +28,10 @@ class RequestExecutor {
         
         // Authorization
         let authorizationValue = configuration.shaValue
-        request.addValue(authorizationValue, forHTTPHeaderField: Constants.RequestExecutor.authHeader)
-        request.addValue(Constants.RequestExecutor.contentTypeValue, forHTTPHeaderField: Constants.RequestExecutor.contentTypeHeader)
+        request.addValue(authorizationValue,
+                         forHTTPHeaderField: Constants.RequestExecutor.authHeader)
+        request.addValue(Constants.RequestExecutor.contentTypeValue,
+                         forHTTPHeaderField: Constants.RequestExecutor.contentTypeHeader)
         Logger.log(messageFormat: "\(Constants.RequestExecutor.authHeader): \(authorizationValue)")
        
         let updateTask = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in

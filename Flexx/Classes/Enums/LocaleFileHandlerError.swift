@@ -16,6 +16,8 @@ enum LocaleFileHandlerError: LocalizedError {
     case readingFile
     case couldNotCreateTmpFile
     case couldNotWriteFile
+    case missingBackupFile(String)
+    case readingBackupFile
     
     var localizedDescription: String {
         switch self {
@@ -26,14 +28,17 @@ enum LocaleFileHandlerError: LocalizedError {
         case .couldNotCreateDirectory(let reason):
             return reason
         case .missingLocaleFile(let filename):
-            let errorMessage = String(format:Constants.FileHandler.missingLocaleFileErrorMessage, filename)
-            return errorMessage
+            return String(format: Constants.FileHandler.missingLocaleFileErrorMessage, filename)
         case .readingFile:
             return Constants.FileHandler.readingFileErrorMessage
         case .couldNotCreateTmpFile:
             return Constants.FileHandler.couldNotCreateTmpFileErrorMessage
         case .couldNotWriteFile:
             return Constants.FileHandler.couldNotWriteFileErrorMessage
+        case .missingBackupFile(let filename):
+            return String(format: Constants.FileHandler.missingBackupFile, filename)
+        case .readingBackupFile:
+            return Constants.FileHandler.readingBackupFileErrorMessage
         }
     }
 }

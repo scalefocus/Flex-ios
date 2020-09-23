@@ -7,8 +7,11 @@
 
 import Foundation
 
+// TODO: Add Protocol, Refactor, Unit Tests
+// TODO: Inject request executor instance, remove inherance
+// TODO: Move it to services
 ///  This service handles update locale translations at intervals.
-class UpdateLocaleService: RequestExecutor {
+final class UpdateLocaleService: RequestExecutor {
     
     private enum ServiceState {
         case stopped
@@ -131,12 +134,14 @@ class UpdateLocaleService: RequestExecutor {
     }
     
     private func getLocaleTransactions(locale: String, domain: String) -> LocaleTranslations? {
-        let localeData = LocaleFileHandler.readLocaleFile(filename: locale,
-                                                          domain: domain)
+        let localeData = LocaleFileHandler.default
+            .readLocaleFile(locale, in: domain)
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         guard let localeTranslations = try? decoder.decode(LocaleTranslations.self,
-                                                           from: localeData) else { return nil }
+                                                           from: localeData) else {
+            return nil
+        }
         return localeTranslations
     }
     
@@ -182,21 +187,20 @@ class UpdateLocaleService: RequestExecutor {
                 Logger.log(messageFormat: Constants.UpdateLocaleService.couldNotUpdateTranslations)
                 return
             }
-            
-            LocaleFileHandler.writeToFile(fileName: receivedScheme.locale,
-                                          data: encodedTranslationData,
-                                          domain: domain.domainId) { [weak self] success in
-                                            guard let strongSelf = self else { return }
-                                            if success {
-                                                Logger.log(messageFormat: Constants.UpdateLocaleService.successfulUpdate, args: [receivedScheme.locale])
-                                                strongSelf.updateTranslationsProtocol.didUpdateTranslations(domain: domain.domainId,
-                                                                                                            translations: oldTranslations)
-                                                strongSelf.updateTranslationsProtocol.didUpdateDomainsVersions(domain: domain.domainId,
-                                                                                                               version: domain.version)
-                                                strongSelf.setupUpdateService(locale: receivedScheme.locale)
-                                            } else {
-                                                Logger.log(messageFormat: Constants.UpdateLocaleService.couldNotUpdateTranslations)
-                                            }
+
+            let success = LocaleFileHandler.default.writeToFile(receivedScheme.locale,
+                                                                data: encodedTranslationData,
+                                                                in: domain.domainId)
+
+            if success {
+                Logger.log(messageFormat: Constants.UpdateLocaleService.successfulUpdate, args: [receivedScheme.locale])
+                updateTranslationsProtocol.didUpdateTranslations(domain: domain.domainId,
+                                                                 translations: oldTranslations)
+                updateTranslationsProtocol.didUpdateDomainsVersions(domain: domain.domainId,
+                                                                    version: domain.version)
+                setupUpdateService(locale: receivedScheme.locale)
+            } else {
+                Logger.log(messageFormat: Constants.UpdateLocaleService.couldNotUpdateTranslations)
             }
         }
     }

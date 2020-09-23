@@ -7,266 +7,303 @@
 
 import Foundation
 
-class LocaleFileHandler {
-    
-    static func initialCopyOfLocaleFiles() {
-        let localeFileHandler = LocaleFileHandler()
-        var shouldUpdateVersion = true
-        // Getting AppllicationSupport directory and BundleDirectory
-        let localizationsDirectoryUrl = try? getLocalizationsDirectory()
-        let bundleLocalizationsDirectory = Bundle.main.bundleURL.appendingPathComponent(Constants.FileHandler.localizationsPath)
-        let bundleLocalizations = try? FileManager.default.contentsOfDirectory(at: bundleLocalizationsDirectory,
-                                                                               includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-        // First we check if we already have value for last zip version, saved in UserDefaults
-        // after that we are trying to read the value for the last zip version from the file we received from backend
-        if let lastSavedVersion = UserDefaults.standard.value(forKey: Constants.UserDefaultKeys.zipFileVersion) as? Int,
-            let lastReadVersion = localeFileHandler.readProjectVersionFile() {
-            // Here we check if our version saved in UserDefaults is different from the one we have from the file we read
-            if lastSavedVersion != lastReadVersion {
-                shouldUpdateVersion = localeFileHandler.updateLocaleFiles(bundleLocalizations: bundleLocalizations, localizationsDirectoryUrl: localizationsDirectoryUrl)
-            } else {
-                shouldUpdateVersion = false
-            }
-        } else {
-           shouldUpdateVersion = localeFileHandler.copyBundleFilesToLocaleDirectory(bundleLocalizations: bundleLocalizations, localizationsDirectoryUrl: localizationsDirectoryUrl)
-        }
-        if shouldUpdateVersion {
-            // Update last version of the zip if everyhing works correctly
-            let version = localeFileHandler.readProjectVersionFile()
-            UserDefaults.standard.set(version, forKey: Constants.UserDefaultKeys.zipFileVersion)
-        }
-    }
-    
-    /// Copy each file from bundleDirectory to localizations directory in ApplicationsSupport
-    /// in order to be able to write.
-    /// If out logic is correct we should be here only on the first launching of the project
-    func copyBundleFilesToLocaleDirectory(bundleLocalizations: [URL]?, localizationsDirectoryUrl: URL?) -> Bool {
-        var shouldUpdateVersion: Bool = false
-        bundleLocalizations?.forEach { (url) in
-            guard let destinationUrl = localizationsDirectoryUrl?.appendingPathComponent(url.lastPathComponent),
-                FileManager.default.fileExists(atPath: url.path),
-                !FileManager.default.fileExists(atPath: destinationUrl.path),
-                LocaleFileHandler().copy(from: url.path, destinationUrlPath: destinationUrl.path) else {
-                shouldUpdateVersion = false
-                return
-            }
-            shouldUpdateVersion = true
-        }
-        return shouldUpdateVersion
-    }
-    
-    /// Delete old files from applications support(we are using "remove" function here)
-    /// and put the new files from bundle directory(we are using "copy" function here)
-    /// With other words we are updating files
-    ///
-    /// - Returns: returns true if everything is successfull and we should update version
-    func updateLocaleFiles(bundleLocalizations: [URL]?, localizationsDirectoryUrl: URL?) -> Bool {
-        var shouldUpdateVersion: Bool = false
-        bundleLocalizations?.forEach { (url) in
-            // Delete old files from applications support(we are using "remove" function here)
-            // and put the new files from bundle directory(we are using "copy" function here)
-            // With other words we are updating files
-            guard
-                let destinationUrl = localizationsDirectoryUrl?.appendingPathComponent(url.lastPathComponent),
-                FileManager.default.fileExists(atPath: url.path),
-                FileManager.default.fileExists(atPath: destinationUrl.path),
-                LocaleFileHandler().remove(at: destinationUrl),
-                LocaleFileHandler().copy(from: url.path, destinationUrlPath: destinationUrl.path)
-                else {
-                    shouldUpdateVersion = false
-                    return
-            }
-            shouldUpdateVersion = true
-        }
-        return shouldUpdateVersion
-    }
-    
-    func readProjectVersionFile() -> Int? {
-        var version: Int?
-        do {
-            let configFileData = LocaleFileHandler.readBackupFile(filename: Constants.FileHandler.zipFileVersionFileName)
-            let json = try JSONSerialization.jsonObject(with: configFileData, options: []) as? [String: Any]
-            version = json?["project_version"] as? Int
-            UserDefaults.standard.set(version, forKey: Constants.UserDefaultKeys.zipFileVersion)
-        } catch {
-            Logger.log(messageFormat: "Error reading project version")
-        }
-        
-        return version
-    }
-    
-    func remove(at url: URL) -> Bool {
-        do {
-            try FileManager.default.removeItem(at: url)
-            return true
-        } catch let error {
-            Logger.log(messageFormat: "Error in removing file at url \(url).\(error.localizedDescription)")
-            return false
-        }
-    }
-    
-    func copy(from urlPath: String, destinationUrlPath: String) -> Bool {
-        do {
-            try FileManager.default.copyItem(atPath: urlPath, toPath: destinationUrlPath)
-            return true
-        } catch let error {
-            Logger.log(messageFormat: "Error in copying file from path \(urlPath) to \(destinationUrlPath) .\(error.localizedDescription)")
-            return false
-        }
-    }
-    
-    /**
-     Locale file should be located in Library/ApplicationSupport/{BundleId}/Localizations/{CurrentDomain} directory.
-     if there is something wrong with that file backup files are used - in bundle directory
-     
-     - parameter filename: name of the locale file.
-     
-     - returns: Data of that file
-     */
-    static func readLocaleFile(filename: String, domain: String = "") -> Data {
-        var fileContents: Data = Data()
-        
-        do {
-            var localizationsDirectoryUrl = try getLocalizationsDirectory()
-            if !domain.isEmpty {
-                localizationsDirectoryUrl = localizationsDirectoryUrl.appendingPathComponent("\(domain)")
-            }
-            let localeFileUrl = localizationsDirectoryUrl
-                .appendingPathComponent(filename)
-                .appendingPathExtension(Constants.FileHandler.jsonFileExtension)
-            
-            fileContents = try readFile(at: localeFileUrl)
-        } catch let error {
-            Logger.log(messageFormat: error.localizedDescription)
-            Logger.log(messageFormat: Constants.FileHandler.readingLocaleFileErrorMessage, args: [filename])
-            fileContents = readBackupFile(filename: filename, domain: domain)
-        }
-        return fileContents
-    }
+struct Project: Decodable {
+    /// Last version
+    let version: Int
 
-    /// Method returns array of fine names for domain name as String values
-    /// - Parameter domain: domain name
-    static func getFilesNames(from domain: String) -> [String] {
-        guard !domain.isEmpty else { return [] } // when domain name is empty we don't have a domain therefore we don't have locale files and cannot continue.
-        do {
-            let localizationsDirectoryUrl = try getLocalizationsDirectory().appendingPathComponent("\(domain)")
-            let directoryContents = try FileManager.default.contentsOfDirectory(at: localizationsDirectoryUrl, includingPropertiesForKeys: nil)
-            let jsonFiles = directoryContents.filter{ $0.pathExtension == Constants.FileHandler.jsonFileExtension }
-            return jsonFiles.map{ $0.deletingPathExtension().lastPathComponent }
-        }
-        catch {
-            Logger.log(messageFormat: error.localizedDescription)
-            Logger.log(messageFormat: Constants.FileHandler.readingLocaleZipFileErrorMessage, args: [domain])
-            return []
-        }
-    }
-    
-    private static func readFile(at url: URL) throws -> Data {
-        var fileContents: Data = Data()
-        // Check if locale file exists
-        guard FileManager.default.fileExists(atPath: url.path) else {
-            let filename = url.lastPathComponent
-            throw LocaleFileHandlerError.missingLocaleFile(filename)
-        }
-        
-        if let contents = FileManager.default.contents(atPath: url.path) {
-            fileContents = contents
-        } else {
-            throw LocaleFileHandlerError.readingFile
-        }
-        return fileContents
-        
-    }
-    
-    /**
-     - Bundle definition: A representation of the code and resources stored in a bundle directory on disk.
-     */
-    /**
-     Reads file from backup directory - {BundleDirectory}/Localizations/{CurrentDomain}
-     - parameter filename: name of the locale file.
-     - returns: Data of that file
-     */
-    static func readBackupFile(filename: String, domain: String = "") -> Data {
-        var fileContents: Data = Data()
-        let bundle = Bundle.main
-        let directory = domain.isEmpty ? Constants.FileHandler.localizationsPath : "\(Constants.FileHandler.localizationsPath)/\(domain)"
-        if let path = bundle.path(forResource: filename, ofType: Constants.FileHandler.jsonFileExtension,
-                                  inDirectory: directory, forLocalization: nil),
-            let fileHandle = FileHandle(forReadingAtPath: path) {
-            fileContents = fileHandle.readDataToEndOfFile()
-            fileHandle.closeFile()
-        } else {
-            Logger.log(messageFormat: Constants.FileHandler.missingBackupFile, args: [filename])
-        }
-        return fileContents
-    }
-    
-    static func writeToFile(fileName: String, data: Data, domain: String, callback: ((Bool) -> Void)? ) {
-        DispatchQueue.global(qos: .background).sync {
-            do {
-                let localizationsDirectory = try getLocalizationsDirectory().appendingPathComponent("/\(domain)")
-                try writeDataToFile(in: localizationsDirectory, fileName: fileName, fileExtension: Constants.FileHandler.jsonFileExtension, contents: data)
-                callback?(true)
-            } catch let error {
-                Logger.log(messageFormat: error.localizedDescription)
-                callback?(false)
-            }
-        }
-    }
-    
-    private static func getLocalizationsDirectory() throws -> URL {
-        guard let bundleId = Bundle.main.bundleIdentifier else {
-            throw LocaleFileHandlerError.noBundleId
-        }
-        
-        guard let applicationSupportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-            throw LocaleFileHandlerError.applicationSupportDirMissing
-        }
-        
-        let localizationsDirectoryUrl = applicationSupportDirectory
-            .appendingPathComponent(bundleId)
-            .appendingPathComponent(Constants.FileHandler.localizationsPath)
-        
-        try createDirectoryIfMissing(localizationsDirectoryUrl)
-        
-        return localizationsDirectoryUrl
-    }
-    
-    private static func writeDataToFile(in directory: URL, fileName: String, fileExtension: String, contents: Data) throws {
-        
-        let currentLocaleFile = directory
-            .appendingPathComponent(fileName)
-            .appendingPathExtension(fileExtension)
-        
-        let tmpFileUrl = directory
-            .appendingPathComponent("\(fileName)_tmp")
-            .appendingPathExtension(fileExtension)
-        
-        // create tmp file with data override if the file exists
-        // Check for file with fileName
-        guard FileManager.default.createFile(atPath: tmpFileUrl.path, contents: contents, attributes: nil) else {
-            throw LocaleFileHandlerError.couldNotCreateTmpFile
-        }
-        
-        if FileManager.default.fileExists(atPath: currentLocaleFile.path) {
-            // remove file with fileName
-            try FileManager.default.removeItem(at: currentLocaleFile)
-        }
-        // rename tmp file
-        try FileManager.default.moveItem(at: tmpFileUrl, to: currentLocaleFile)
-    }
-    
-    /**
-     Create Directory if passed url is missing.
-     */
-    private static func createDirectoryIfMissing(_ directoryUrl: URL) throws {
-        if !FileManager.default.fileExists(atPath: directoryUrl.path) {
-            do {
-                try FileManager.default.createDirectory(at: directoryUrl, withIntermediateDirectories: true, attributes: nil)
-            } catch let error {
-                throw LocaleFileHandlerError.couldNotCreateDirectory(error.localizedDescription)
-            }
-        }
+    enum CodingKeys: String, CodingKey {
+        case version = "project_version"
     }
 }
 
+/// Internal class  locale file
+public final class LocaleFileHandler {
+
+    // MARK: - Default implementation
+
+    static let `default` = LocaleFileHandler()
+
+    // MARK: - Dependecies
+
+    private var settingsService: SettingsService
+    private let fileService: FileService
+    private let bundleService: BundleService
+
+    // MARK: - Initialization
+
+    // This approach will allow us to inject all dependecies in the constructor
+    public init(_ settings: SettingsService = SettingsServiceImpl(),
+                _ fileService: FileService = FileServiceImpl(),
+                _ bundleService: BundleService = BundleServiceImpl()) {
+        self.settingsService = settings
+        self.fileService = fileService
+        self.bundleService = bundleService
+    }
+
+    // MARK: - Clone Locale Files from Bundle to Application Support Directory
+
+    private typealias CloneAction = (([URL], URL?) -> Bool)?
+
+    /// Makes copy of all files from bundle directory to application support directory
+    /// Old name was `initialCopyOfLocaleFiles`
+    public func cloneLocaleFilesFromBundleToApplicationSupportDirectory() {
+        // try to read the last zip version from the file we received from backend
+        let lastReadVersion = readProjectVersionFile()
+
+        // get AppllicationSupport directory
+        let localizationsDirectoryUrl = try? localeFilesDirectoryUrl()
+
+        // get localizations
+        let bundleLocalizations = localeFilesInBundle()
+
+        // get handler to action thath should be performed
+        let actionHandler = cloneAction(lastSavedVersion: settingsService.lastVersion,
+                                        with: lastReadVersion)
+
+        // call the action and check the result
+        if actionHandler?(bundleLocalizations, localizationsDirectoryUrl) == true {
+            // Action is completed with success. Update last version of the zip
+            settingsService.lastVersion = lastReadVersion
+        }
+    }
+
+    private func readProjectVersionFile() -> Int {
+        let fileName = Constants.FileHandler.zipFileVersionFileName
+        let configFileData = readBackupFile(fileName)
+        do {
+            return try parseProjectVersion(data: configFileData)
+        } catch {
+            Logger.log(messageFormat: "Error reading project version")
+            return .invalidVersion
+        }
+    }
+
+    private func parseProjectVersion(data: Data) throws -> Int {
+        let jsonDecoder = JSONDecoder()
+        let project = try jsonDecoder.decode(Project.self, from: data)
+        return project.version
+    }
+
+    private func localeFilesInBundle() -> [URL] {
+        let directory = bundleService.localizationsUrl
+        let result = try? fileService.files(at: directory)
+        return result ?? []
+    }
+
+    private func cloneAction(lastSavedVersion: Int,
+                             with lastReadVersion: Int) -> CloneAction {
+        // check for valid values
+        guard lastReadVersion != .invalidVersion else {
+            return nil
+        }
+
+        guard lastSavedVersion != .invalidVersion  else {
+            return copyBundleFilesToLocaleDirectory
+        }
+
+        // compare
+        // NOTE: It will work even if saved version is newer than readed one
+        if lastSavedVersion != lastReadVersion {
+            return updateLocaleFiles
+        }
+
+        return nil
+    }
+
+    /// Copy each file from bundleDirectory to localizations directory in ApplicationsSupport
+    /// in order to be able to write.
+    /// If our logic is correct we should be here only on the first launching of the project
+    ///
+    /// - Returns: returns true if everything is successfull
+    private func copyBundleFilesToLocaleDirectory(bundleLocalizations: [URL],
+                                                  localizationsDirectoryUrl: URL?) -> Bool {
+        guard let dir = localizationsDirectoryUrl else {
+            return false
+        }
+        // Even if one copy file fails we should return `false` in order to skip version update
+        let result = bundleLocalizations
+            .map { (fromUrl) in
+                let toUrl = dir.appendingPathComponent(fromUrl.lastPathComponent)
+
+                // Retruns `true` if file is copied with success. Otherwise `false`
+                // !!! It will check if `fromUrl` exists and `toUrl` doesn't exists
+                return fileService.copy(from: fromUrl, to: toUrl)
+            }
+            .reduce(true, { $0 && $1 })
+        return result
+    }
+
+    /// Delete old files from applications support (we are using "remove" function here)
+    /// and put the new files from bundle directory (we are using "copy" function here)
+    /// With other words we are updating files
+    ///
+    /// - Returns: returns true if everything is successfull
+    private func updateLocaleFiles(bundleLocalizations: [URL],
+                                   localizationsDirectoryUrl: URL?) -> Bool {
+        guard let dir = localizationsDirectoryUrl else {
+            return false
+        }
+        // Even if one update file fails we should return `false` in order to skip version update
+        let result = bundleLocalizations
+            .map { (fromUrl) in
+                let toUrl = dir.appendingPathComponent(fromUrl.lastPathComponent)
+
+                _ = fileService.remove(at: toUrl)
+
+                // Retruns `true` if file is copied with success. Otherwise `false`
+                // !!! It will check if `fromUrl` exists and `toUrl` doesn't exists
+                return fileService.copy(from: fromUrl, to: toUrl)
+        }
+        .reduce(true, { $0 && $1 })
+        return result
+    }
+
+    // MARK: - Read/Write Locale File
+
+    /**
+     Locale file should be located in Library/ApplicationSupport/{BundleId}/Localizations/{CurrentDomain} directory.
+     if there is something wrong with that file backup files are used - in bundle directory
+
+     - parameter fileName: name of the locale file.
+     - parameter domain: Locale domain. Default is empty string - no domain.
+
+     - returns: Content of that file as Data
+     */
+    public func readLocaleFile(_ fileName: String, in domain: String = "") -> Data {
+        do {
+            let localizationsDirectoryUrl = try self.localeFilesDirectoryUrl()
+            let localeFileUrl = self.localeFileUrl(fileName,
+                                                   for: localizationsDirectoryUrl,
+                                                   in: domain)
+            return try fileService.read(at: localeFileUrl)
+        } catch let error {
+            Logger.log(messageFormat: error.localizedDescription)
+            Logger.log(messageFormat: Constants.FileHandler.readingLocaleFileErrorMessage,
+                       args: [fileName])
+
+            // fallback
+            return readBackupFile(fileName, in: domain)
+        }
+    }
+
+    private func localeFileUrl(_ fileName: String,
+                               for directory: URL,
+                               in domain: String) -> URL {
+        let localeFileDir = domain.isEmpty ?
+            directory : directory.appendingPathComponent(domain)
+        return localeFileDir
+            .appendingPathComponent(fileName)
+            .appendingPathExtension(Constants.FileHandler.jsonFileExtension)
+    }
+
+    /**
+     Reads file from backup directory.
+     - parameter fileName: name of the locale file.
+     - returns: Contents of that file or empty Data in case of error
+     */
+    public func readBackupFile(_ fileName: String, in domain: String = "") -> Data  {
+        do {
+            return try readBundleFile(fileName, in: domain)
+        } catch let error {
+            Logger.log(messageFormat: error.localizedDescription)
+            Logger.log(messageFormat: Constants.FileHandler.readingBackupFileErrorMessage,
+                       args: [fileName])
+
+            // fallback
+            return Data()
+        }
+    }
+
+    private func readBundleFile(_ fileName: String, in domain: String) throws -> Data {
+        // we need valid path and existing file
+        guard let fileUrl = bundleService.url(forLocaleFile: fileName, in: domain) else {
+            throw LocaleFileHandlerError.missingBackupFile(fileName)
+        }
+
+        // try read it
+        do {
+            return try fileService.read(at: fileUrl)
+        } catch {
+            throw LocaleFileHandlerError.readingBackupFile
+        }
+    }
+
+    /**
+     Writes file to application directory
+     - parameter fileName: name of the locale file.
+     - parameter data: contents of the file.
+     - parameter domain: Locale domain.
+     - returns: `true` if successfull
+     */
+    public func writeToFile(_ fileName: String, data: Data, in domain: String) -> Bool {
+        DispatchQueue.global(qos: .background).sync {
+            do {
+                let localizationsDirectoryUrl = try self.localeFilesDirectoryUrl()
+                let localeFileUrl = self.localeFileUrl(fileName,
+                                                       for: localizationsDirectoryUrl,
+                                                       in: domain)
+                try fileService.write(localeFileUrl, data: data)
+                return true
+            } catch let error {
+                Logger.log(messageFormat: error.localizedDescription)
+                return false
+            }
+        }
+    }
+
+    // MARK: - Files Names
+
+    /// Method returns array of file names for domain name as String values
+    ///
+    /// - Parameter domain: domain name
+    ///
+    /// - returns: array of file names for domain name as String values.
+    public func localeFilesNames(in domain: String) -> [String] {
+        do {
+            // get AppllicationSupport directory
+            let localizationsDirectoryUrl = try self.localeFilesDirectoryUrl()
+            // add domain if not empty
+            let directory = domain.isEmpty ?
+                localizationsDirectoryUrl :
+                localizationsDirectoryUrl.appendingPathComponent(domain)
+
+            let jsonFiles = try fileService.files(at: directory).filter {
+                $0.pathExtension == Constants.FileHandler.jsonFileExtension
+            }
+            return jsonFiles.map { $0.deletingPathExtension().lastPathComponent }
+        } catch {
+            Logger.log(messageFormat: error.localizedDescription)
+            Logger.log(messageFormat: Constants.FileHandler.readingLocaleFileNamesErrorMessage,
+                       args: [domain])
+            return []
+        }
+    }
+
+    /**
+     Get the directory that contains all localization files. It is located in ApplicationSupportDirectory.
+     - Will try to create the directory if it is missing.
+     - returns: URL to that directory.
+     */
+    public func localeFilesDirectoryUrl() throws -> URL {
+        guard let bundleId = bundleService.bundleIdentifier else {
+            throw LocaleFileHandlerError.noBundleId
+        }
+
+        let localizationsDirectoryUrl = try applicationSupportDirectory()
+            .appendingPathComponent(bundleId)
+            .appendingPathComponent(Constants.FileHandler.localizationsPath)
+
+        try fileService.createDirectory(localizationsDirectoryUrl)
+
+        return localizationsDirectoryUrl
+    }
+
+    private func applicationSupportDirectory() throws -> URL {
+        do {
+            return try fileService.applicationSupportDirectory()
+        }  catch {
+            throw LocaleFileHandlerError.applicationSupportDirMissing
+        }
+    }
+
+}

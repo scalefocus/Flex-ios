@@ -13,3 +13,9 @@ extension Dictionary {
         }
     }
 }
+
+// MARK: - Int + Version
+
+extension Int {
+    public static let invalidVersion: Int = -1000
+}

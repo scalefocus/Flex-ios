@@ -7,7 +7,8 @@
 
 import Foundation
 
-class RequestErrorHandler {
+// TODO: Add Protocol, Refactor, Unit Tests
+final class RequestErrorHandler {
     /// Check if there is some error with request response and Log a proper message about it.
     ///
     /// - Parameters:

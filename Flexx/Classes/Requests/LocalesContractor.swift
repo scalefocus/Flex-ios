@@ -7,7 +7,9 @@
 
 import Foundation
 
-class LocalesContractor: RequestExecutor {
+// TODO: Add Protocol, Refactor, Unit Tests
+// TODO: Inject request executor instance, remove inherance
+final class LocalesContractor: RequestExecutor {
     
     func getLocales(completion: @escaping ([Language]) -> Void) {
         
@@ -36,7 +38,7 @@ class LocalesContractor: RequestExecutor {
     func getLocalesFromFiles(for domain: String?) -> [Language] {
         guard let domainName = domain,
             !domainName.isEmpty else { return [] }
-        let localeNames = LocaleFileHandler.getFilesNames(from: domainName)
+        let localeNames = LocaleFileHandler.default.localeFilesNames(in: domainName)
         let languages: [Language] = localeNames.compactMap {
             guard let langName = getCountryNameWith(countryCode: $0) else { return nil }
             return Language(code: $0, name: langName)

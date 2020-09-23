@@ -18,6 +18,7 @@ protocol UpdateTranslationsProtocol: class {
     func getDomainsVersionsInfo() -> [String: Int]
 }
 
+// TODO: Refactor, Unit Tests
 public class Flexx {
     
     // MARK: Public properies
@@ -37,7 +38,9 @@ public class Flexx {
     private var defaultReturn: DefaultReturnBehavior = .empty
     
     /// ConcurrentQueue for managing the reading and writing to transactions.
-    private let concurrentQueue = DispatchQueue(label: "concurrentQueue", qos: .userInteractive, attributes: .concurrent)
+    private let concurrentQueue = DispatchQueue(label: "concurrentQueue",
+                                                qos: .userInteractive,
+                                                attributes: .concurrent)
     
     /// Configuration contains all needed information for making requests.
     private var configuration: Configuration?
@@ -121,7 +124,8 @@ public class Flexx {
         
         // Make copy for all files from bundle directory to application support directory
         DispatchQueue.global(qos: .background).sync {
-            LocaleFileHandler.initialCopyOfLocaleFiles()
+            LocaleFileHandler.default
+                .cloneLocaleFilesFromBundleToApplicationSupportDirectory()
         }
         
         setValueToDefaultLocale()
@@ -136,6 +140,7 @@ public class Flexx {
         
         completed?()
     }
+
     ///  Gets current locale
     ///  - returns: Locale value representing current Locale
     public func getCurrentLocale() -> Locale {
@@ -229,14 +234,14 @@ public class Flexx {
     /**
      Method for keep track with Application Lifecycle and more specifically when the application will enter background.
      */
-    @objc func didEnterBackground(_ notification: Notification) {
+    @objc private func didEnterBackground(_ notification: Notification) {
         updateService?.stopUpdateService()
     }
     
     /**
      Method for keep track with Application Lifecycle and more specifically when the application will enter foreground.
      */
-    @objc func willEnterForeground(_ notification: Notification) {
+    @objc private func willEnterForeground(_ notification: Notification) {
         updateService?.startUpdateService(locale: localeFileName(locale: currentLocale))
     }
     
@@ -259,19 +264,17 @@ public class Flexx {
     /// to read backup file. If backup file is empty we switch the locale
     /// to default locale and read the backup file for it.
     private func readLocaleFile(fileName: String, domain: String) -> Data {
-        var fileContent: Data
-        
-        fileContent = LocaleFileHandler.readLocaleFile(filename: fileName, domain: domain)
-        
-        if fileContent.isEmpty {
-            Logger.log(messageFormat: Constants.Localizer.emptyLocaleFileError, args: [fileName])
-            fileContent = LocaleFileHandler.readBackupFile(filename: fileName, domain: domain)
-        }
+        // !!! If locale file is not found this method will try to read
+        //the corresponding "backup" file from the bundle
+        var fileContent = LocaleFileHandler.default
+            .readLocaleFile(fileName, in: domain)
         
         if fileContent.isEmpty {
             Logger.log(messageFormat: Constants.Localizer.emptyLocaleBackupFileError, args: [fileName])
             Logger.log(messageFormat: Constants.Localizer.changedToDefaultLocale, args: [defaultLocaleFileName])
-            fileContent = LocaleFileHandler.readBackupFile(filename: defaultLocaleFileName, domain: domain)
+
+            fileContent = LocaleFileHandler.default
+                .readBackupFile(defaultLocaleFileName, in: domain)
             currentLocale = Locale(identifier: defaultLocaleFileName)
         }
         
@@ -285,17 +288,23 @@ public class Flexx {
     /// - parameter domain: Domain name
     private func handleLocale(fileName: String, domain: String) {
         // 1. Read locale file
-        let localeData = readLocaleFile(fileName: fileName, domain: domain)
+        let localeData = readLocaleFile(fileName: fileName,
+                                        domain: domain)
         
         // 2. Parse translations to Locale
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         do {
-            let localeTranslations = try decoder.decode(LocaleTranslations.self, from: localeData)
+            // read data
+            let localeTranslations = try decoder
+                .decode(LocaleTranslations.self, from: localeData)
+
             // 3. Store translations for every domain in one place
-            storeTranslations(domain: localeTranslations.domainId, translations: localeTranslations.translations)
-            storeDomainsVersions(domain: localeTranslations.domainId, version: localeTranslations.version)
+            storeTranslations(domain: localeTranslations.domainId,
+                              translations: localeTranslations.translations)
+            storeDomainsVersions(domain: localeTranslations.domainId,
+                                 version: localeTranslations.version)
         }
         catch let error {
             Logger.log(messageFormat: error.localizedDescription)
@@ -314,10 +323,20 @@ public class Flexx {
                 return
         }
         do {
-            let data = LocaleFileHandler.readLocaleFile(filename: "config", domain: firstDomain)
+            // 1. Read locale file
+            let data = LocaleFileHandler.default
+                .readLocaleFile("config", // TODO: Move to Constants file
+                                in: firstDomain)
+
+            // 2. Parse translations to Locale
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let jsonData = try decoder.decode(Config.self, from: data)
+
+            // read data
+            let jsonData = try decoder
+                .decode(Config.self, from: data)
+
+            // 3. store default locale
             defaultLocaleFileName = jsonData.defaultLocale
         } catch let error {
             Logger.log(messageFormat: error.localizedDescription)

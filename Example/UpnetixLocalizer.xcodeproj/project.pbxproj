@@ -14,6 +14,12 @@
 		1A40A2881FE3E6DB00E4FCE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A40A2871FE3E6DB00E4FCE7 /* Assets.xcassets */; };
 		1A40A28B1FE3E6DB00E4FCE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A40A2891FE3E6DB00E4FCE7 /* LaunchScreen.storyboard */; };
 		1CAA73994CD836F76B0A37B9 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		41A107442518FEB400C92712 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A107432518FEB400C92712 /* TestHelper.swift */; };
+		41A1074F251B6F2C00C92712 /* MockSettingsServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A10747251B6F0A00C92712 /* MockSettingsServiceImp.swift */; };
+		41A10756251B6F3100C92712 /* MockFileServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A1074B251B6F2600C92712 /* MockFileServiceImp.swift */; };
+		41A1075A251B6F5300C92712 /* MockBundleServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A10759251B6F5300C92712 /* MockBundleServiceImp.swift */; };
+		41AAF4DE2507A697004A397C /* LocaleFileHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41AAF4DD2507A697004A397C /* LocaleFileHandlerTests.swift */; };
+		41AAF4EF250B4E30004A397C /* MockUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41AAF4EE250B4E30004A397C /* MockUserDefaults.swift */; };
 		6269137BE61E09469FD22F85 /* Pods_UpnetixLocalizerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFAAEDD27A23C862B5FBBFDB /* Pods_UpnetixLocalizerDemo.framework */; };
 		ABE7DC7824597F3200200F08 /* FlexxConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5C819EC82302CB3500D311F4 /* FlexxConfig.plist */; };
 /* End PBXBuildFile section */
@@ -37,21 +43,21 @@
 		1A40A28A1FE3E6DB00E4FCE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A40A28C1FE3E6DB00E4FCE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		342C42A9E36FF660A1672037 /* Pods_UpnetixLocalizer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpnetixLocalizer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		41A107432518FEB400C92712 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
+		41A10747251B6F0A00C92712 /* MockSettingsServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsServiceImp.swift; sourceTree = "<group>"; };
+		41A1074B251B6F2600C92712 /* MockFileServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFileServiceImp.swift; sourceTree = "<group>"; };
+		41A10759251B6F5300C92712 /* MockBundleServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBundleServiceImp.swift; sourceTree = "<group>"; };
+		41AAF4DD2507A697004A397C /* LocaleFileHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleFileHandlerTests.swift; sourceTree = "<group>"; };
+		41AAF4EE250B4E30004A397C /* MockUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaults.swift; sourceTree = "<group>"; };
 		45DA5A6C1F25EC1AF2D71514 /* Pods-UpnetixLocalizer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpnetixLocalizer_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UpnetixLocalizer_Tests/Pods-UpnetixLocalizer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		5BC9839F29CA59D1A3886530 /* Pods-UpnetixLocalizerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpnetixLocalizerDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-UpnetixLocalizerDemo/Pods-UpnetixLocalizerDemo.release.xcconfig"; sourceTree = "<group>"; };
 		5C819EC82302CB3500D311F4 /* FlexxConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = FlexxConfig.plist; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* UpnetixLocalizer_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UpnetixLocalizer_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		68AB7C9B0269CEC204144B80 /* Pods-UpnetixLocalizerDemoSecondTarget.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpnetixLocalizerDemoSecondTarget.release.xcconfig"; path = "Pods/Target Support Files/Pods-UpnetixLocalizerDemoSecondTarget/Pods-UpnetixLocalizerDemoSecondTarget.release.xcconfig"; sourceTree = "<group>"; };
 		8A2BEB384C91B2B55A950540 /* Pods-UpnetixLocalizerDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpnetixLocalizerDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UpnetixLocalizerDemo/Pods-UpnetixLocalizerDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		9172016CF595969C76943C93 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		9A644A8015E80B54D68E8087 /* Pods-UpnetixLocalizerDemoSecondTarget.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpnetixLocalizerDemoSecondTarget.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UpnetixLocalizerDemoSecondTarget/Pods-UpnetixLocalizerDemoSecondTarget.debug.xcconfig"; sourceTree = "<group>"; };
 		A46744FBE8A357C8CCD72390 /* Pods-UpnetixLocalizer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpnetixLocalizer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-UpnetixLocalizer_Tests/Pods-UpnetixLocalizer_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		ABE7DC762459733100200F08 /* UpnetixLocalizerDemo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = UpnetixLocalizerDemo.plist; path = "/Users/andrey.ninikolov/Documents/Upn/Flex-ios/Example/UpnetixLocalizerDemo.plist"; sourceTree = "<absolute>"; };
-		ABE7DC7C24597FF300200F08 /* UpnetixLocalizerDemoSecondTarget.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = UpnetixLocalizerDemoSecondTarget.plist; path = "/Users/andrey.ninikolov/Documents/Upn/Flex-ios/Example/UpnetixLocalizerDemoSecondTarget.plist"; sourceTree = "<absolute>"; };
-		ABE7DC82245ADB3700200F08 /* FlexxConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = FlexxConfig.plist; path = UpnetixLocalizerDemoSecondTarget/FlexxConfig.plist; sourceTree = SOURCE_ROOT; };
 		AC53D10A19AC4FDA21EC2740 /* Flexx.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Flexx.podspec; path = ../Flexx.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		BA63B7C34E5CF0D0ADCAF0E2 /* Pods_UpnetixLocalizerDemoSecondTarget.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpnetixLocalizerDemoSecondTarget.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE507EA0CDC8682A41C73F20 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		CFAAEDD27A23C862B5FBBFDB /* Pods_UpnetixLocalizerDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpnetixLocalizerDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -96,21 +102,28 @@
 			children = (
 				8A2BEB384C91B2B55A950540 /* Pods-UpnetixLocalizerDemo.debug.xcconfig */,
 				5BC9839F29CA59D1A3886530 /* Pods-UpnetixLocalizerDemo.release.xcconfig */,
-				9A644A8015E80B54D68E8087 /* Pods-UpnetixLocalizerDemoSecondTarget.debug.xcconfig */,
-				68AB7C9B0269CEC204144B80 /* Pods-UpnetixLocalizerDemoSecondTarget.release.xcconfig */,
 				45DA5A6C1F25EC1AF2D71514 /* Pods-UpnetixLocalizer_Tests.debug.xcconfig */,
 				A46744FBE8A357C8CCD72390 /* Pods-UpnetixLocalizer_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		41AAF4ED250B4E17004A397C /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				41AAF4EE250B4E30004A397C /* MockUserDefaults.swift */,
+				41A10747251B6F0A00C92712 /* MockSettingsServiceImp.swift */,
+				41A1074B251B6F2600C92712 /* MockFileServiceImp.swift */,
+				41A10759251B6F5300C92712 /* MockBundleServiceImp.swift */,
+			);
+			name = Mocks;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
-				ABE7DC762459733100200F08 /* UpnetixLocalizerDemo.plist */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACE81AFB9204008FA782 /* Tests */,
-				ABE7DC7D24597FF300200F08 /* UpnetixLocalizerDemoSecondTarget */,
 				1A40A27F1FE3E6DB00E4FCE7 /* UpnetixLocalizerDemo */,
 				607FACD11AFB9204008FA782 /* Products */,
 				1E3B5CB3500682D746BC7517 /* Pods */,
@@ -130,7 +143,10 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				41AAF4ED250B4E17004A397C /* Mocks */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				41AAF4DD2507A697004A397C /* LocaleFileHandlerTests.swift */,
+				41A107432518FEB400C92712 /* TestHelper.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -153,20 +169,9 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		ABE7DC7D24597FF300200F08 /* UpnetixLocalizerDemoSecondTarget */ = {
-			isa = PBXGroup;
-			children = (
-				ABE7DC82245ADB3700200F08 /* FlexxConfig.plist */,
-				ABE7DC7C24597FF300200F08 /* UpnetixLocalizerDemoSecondTarget.plist */,
-			);
-			name = UpnetixLocalizerDemoSecondTarget;
-			path = "/Users/andrey.ninikolov/Documents/Upn/Flex-ios/Example/New Group";
-			sourceTree = "<absolute>";
-		};
 		E6E05C0FEAAC4E68B84D4778 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BA63B7C34E5CF0D0ADCAF0E2 /* Pods_UpnetixLocalizerDemoSecondTarget.framework */,
 				CFAAEDD27A23C862B5FBBFDB /* Pods_UpnetixLocalizerDemo.framework */,
 				342C42A9E36FF660A1672037 /* Pods_UpnetixLocalizer_Tests.framework */,
 			);
@@ -359,6 +364,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41A107442518FEB400C92712 /* TestHelper.swift in Sources */,
 				1A40A2831FE3E6DB00E4FCE7 /* ViewController.swift in Sources */,
 				1A40A2811FE3E6DB00E4FCE7 /* AppDelegate.swift in Sources */,
 			);
@@ -368,6 +374,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41A1075A251B6F5300C92712 /* MockBundleServiceImp.swift in Sources */,
+				41A10756251B6F3100C92712 /* MockFileServiceImp.swift in Sources */,
+				41A1074F251B6F2C00C92712 /* MockSettingsServiceImp.swift in Sources */,
+				41AAF4EF250B4E30004A397C /* MockUserDefaults.swift in Sources */,
+				41AAF4DE2507A697004A397C /* LocaleFileHandlerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
