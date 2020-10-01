@@ -14,12 +14,21 @@
 		1A40A2881FE3E6DB00E4FCE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A40A2871FE3E6DB00E4FCE7 /* Assets.xcassets */; };
 		1A40A28B1FE3E6DB00E4FCE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A40A2891FE3E6DB00E4FCE7 /* LaunchScreen.storyboard */; };
 		1CAA73994CD836F76B0A37B9 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		4185A5F4251DCFBF0066BF30 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4185A5F3251DCFBF0066BF30 /* MockURLProtocol.swift */; };
 		41A107442518FEB400C92712 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A107432518FEB400C92712 /* TestHelper.swift */; };
 		41A1074F251B6F2C00C92712 /* MockSettingsServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A10747251B6F0A00C92712 /* MockSettingsServiceImp.swift */; };
 		41A10756251B6F3100C92712 /* MockFileServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A1074B251B6F2600C92712 /* MockFileServiceImp.swift */; };
 		41A1075A251B6F5300C92712 /* MockBundleServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A10759251B6F5300C92712 /* MockBundleServiceImp.swift */; };
 		41AAF4DE2507A697004A397C /* LocaleFileHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41AAF4DD2507A697004A397C /* LocaleFileHandlerTests.swift */; };
 		41AAF4EF250B4E30004A397C /* MockUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41AAF4EE250B4E30004A397C /* MockUserDefaults.swift */; };
+		41F426EF2523212C003BEA40 /* UpdateLocalizationsWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F426EE2523212C003BEA40 /* UpdateLocalizationsWorkerTests.swift */; };
+		41F426F525235E15003BEA40 /* StubUpdates.json in Resources */ = {isa = PBXBuildFile; fileRef = 41F426F425235E15003BEA40 /* StubUpdates.json */; };
+		41F426FB2523815F003BEA40 /* UpdateLocaleServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F426FA2523815F003BEA40 /* UpdateLocaleServiceTests.swift */; };
+		41F4270225249ECF003BEA40 /* MockTimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F4270125249ECF003BEA40 /* MockTimerService.swift */; };
+		41F427062524C496003BEA40 /* StoreLocalizationsWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F427052524C496003BEA40 /* StoreLocalizationsWorkerTests.swift */; };
+		41FF30CD252216460051205E /* RequestErrorHandlerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF30CC252216460051205E /* RequestErrorHandlerTest.swift */; };
+		41FF30D125221B320051205E /* LocalesContractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF30D025221B320051205E /* LocalesContractorTests.swift */; };
+		41FF31002522289A0051205E /* StubLocales.json in Resources */ = {isa = PBXBuildFile; fileRef = 41FF30FA252228470051205E /* StubLocales.json */; };
 		6269137BE61E09469FD22F85 /* Pods_UpnetixLocalizerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFAAEDD27A23C862B5FBBFDB /* Pods_UpnetixLocalizerDemo.framework */; };
 		ABE7DC7824597F3200200F08 /* FlexxConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5C819EC82302CB3500D311F4 /* FlexxConfig.plist */; };
 /* End PBXBuildFile section */
@@ -43,12 +52,21 @@
 		1A40A28A1FE3E6DB00E4FCE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A40A28C1FE3E6DB00E4FCE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		342C42A9E36FF660A1672037 /* Pods_UpnetixLocalizer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpnetixLocalizer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4185A5F3251DCFBF0066BF30 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		41A107432518FEB400C92712 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		41A10747251B6F0A00C92712 /* MockSettingsServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsServiceImp.swift; sourceTree = "<group>"; };
 		41A1074B251B6F2600C92712 /* MockFileServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFileServiceImp.swift; sourceTree = "<group>"; };
 		41A10759251B6F5300C92712 /* MockBundleServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBundleServiceImp.swift; sourceTree = "<group>"; };
 		41AAF4DD2507A697004A397C /* LocaleFileHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleFileHandlerTests.swift; sourceTree = "<group>"; };
 		41AAF4EE250B4E30004A397C /* MockUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaults.swift; sourceTree = "<group>"; };
+		41F426EE2523212C003BEA40 /* UpdateLocalizationsWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLocalizationsWorkerTests.swift; sourceTree = "<group>"; };
+		41F426F425235E15003BEA40 /* StubUpdates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StubUpdates.json; sourceTree = "<group>"; };
+		41F426FA2523815F003BEA40 /* UpdateLocaleServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLocaleServiceTests.swift; sourceTree = "<group>"; };
+		41F4270125249ECF003BEA40 /* MockTimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTimerService.swift; sourceTree = "<group>"; };
+		41F427052524C496003BEA40 /* StoreLocalizationsWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreLocalizationsWorkerTests.swift; sourceTree = "<group>"; };
+		41FF30CC252216460051205E /* RequestErrorHandlerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestErrorHandlerTest.swift; sourceTree = "<group>"; };
+		41FF30D025221B320051205E /* LocalesContractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalesContractorTests.swift; sourceTree = "<group>"; };
+		41FF30FA252228470051205E /* StubLocales.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StubLocales.json; sourceTree = "<group>"; };
 		45DA5A6C1F25EC1AF2D71514 /* Pods-UpnetixLocalizer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpnetixLocalizer_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UpnetixLocalizer_Tests/Pods-UpnetixLocalizer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		5BC9839F29CA59D1A3886530 /* Pods-UpnetixLocalizerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UpnetixLocalizerDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-UpnetixLocalizerDemo/Pods-UpnetixLocalizerDemo.release.xcconfig"; sourceTree = "<group>"; };
 		5C819EC82302CB3500D311F4 /* FlexxConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = FlexxConfig.plist; sourceTree = "<group>"; };
@@ -115,8 +133,27 @@
 				41A10747251B6F0A00C92712 /* MockSettingsServiceImp.swift */,
 				41A1074B251B6F2600C92712 /* MockFileServiceImp.swift */,
 				41A10759251B6F5300C92712 /* MockBundleServiceImp.swift */,
+				4185A5F3251DCFBF0066BF30 /* MockURLProtocol.swift */,
+				41F4270125249ECF003BEA40 /* MockTimerService.swift */,
 			);
 			name = Mocks;
+			sourceTree = "<group>";
+		};
+		41F426FE25238173003BEA40 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				41A107432518FEB400C92712 /* TestHelper.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		41FF30F9252228200051205E /* Stubs */ = {
+			isa = PBXGroup;
+			children = (
+				41FF30FA252228470051205E /* StubLocales.json */,
+				41F426F425235E15003BEA40 /* StubUpdates.json */,
+			);
+			name = Stubs;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
@@ -143,10 +180,16 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				41F426FE25238173003BEA40 /* Utils */,
+				41FF30F9252228200051205E /* Stubs */,
 				41AAF4ED250B4E17004A397C /* Mocks */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				41AAF4DD2507A697004A397C /* LocaleFileHandlerTests.swift */,
-				41A107432518FEB400C92712 /* TestHelper.swift */,
+				41FF30CC252216460051205E /* RequestErrorHandlerTest.swift */,
+				41FF30D025221B320051205E /* LocalesContractorTests.swift */,
+				41F426EE2523212C003BEA40 /* UpdateLocalizationsWorkerTests.swift */,
+				41F426FA2523815F003BEA40 /* UpdateLocaleServiceTests.swift */,
+				41F427052524C496003BEA40 /* StoreLocalizationsWorkerTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -279,6 +322,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41FF31002522289A0051205E /* StubLocales.json in Resources */,
+				41F426F525235E15003BEA40 /* StubUpdates.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,9 +421,16 @@
 			files = (
 				41A1075A251B6F5300C92712 /* MockBundleServiceImp.swift in Sources */,
 				41A10756251B6F3100C92712 /* MockFileServiceImp.swift in Sources */,
+				41F426EF2523212C003BEA40 /* UpdateLocalizationsWorkerTests.swift in Sources */,
+				41FF30CD252216460051205E /* RequestErrorHandlerTest.swift in Sources */,
 				41A1074F251B6F2C00C92712 /* MockSettingsServiceImp.swift in Sources */,
+				41FF30D125221B320051205E /* LocalesContractorTests.swift in Sources */,
+				41F426FB2523815F003BEA40 /* UpdateLocaleServiceTests.swift in Sources */,
+				4185A5F4251DCFBF0066BF30 /* MockURLProtocol.swift in Sources */,
+				41F427062524C496003BEA40 /* StoreLocalizationsWorkerTests.swift in Sources */,
 				41AAF4EF250B4E30004A397C /* MockUserDefaults.swift in Sources */,
 				41AAF4DE2507A697004A397C /* LocaleFileHandlerTests.swift in Sources */,
+				41F4270225249ECF003BEA40 /* MockTimerService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

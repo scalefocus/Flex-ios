@@ -8,9 +8,8 @@
 struct Constants {
     
     struct RequestErrorHandler {
-        static let httpRequestError = "Error: %@"
-        static let requestResponseError = "Not http Error(Some kind of network error): %@"
-        static let requestHttpResponseError = "HTTP Error: %@"
+        static let httpRequestError = "Network error: %@"
+        static let requestResponseError = "Invalid network response"
         static let couldNotCreateUrlRequest = "Couldn't create update request object."
     }
     
@@ -31,9 +30,12 @@ struct Constants {
         static let couldNotUpdateTranslations = "Couldn't update current locale file and in memory translations"
         static let emptyTranslations = "There are no translations to be updated"
         static let currentlyUpdatingMessage = "There is an update that is currently in progress. Your update request is enqueued"
-        static let missingUpdateScheme = "Update service was not started because no scheme was provided"
+        static let missingUpdateScheme = "No scheme was provided"
         static let relativePath = "/api/localizations/v1.1/update_check"
         static let successfulUpdate = "Update is successful for %@"
+        static let updateError = "Update error: %@"
+        static let badState = "Update is stopped. Bad state."
+        static let invalidLocale = "Locale identifier is invalid"
     }
     
     struct FileHandler {
@@ -83,5 +85,11 @@ struct Constants {
 
     struct JSONConfigKey {
         static let projectVersion = "project_version"
+    }
+
+    struct UpdateLocalizationsWorker {
+        static let encodingError = "Encoding error: %@"
+        static let decodingError = "Decoding error: %@"
+        static let invalidBaseUrlError = "Invalid base URL: %@."
     }
 }

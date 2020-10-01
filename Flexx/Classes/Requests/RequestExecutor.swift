@@ -7,46 +7,74 @@
 
 import Foundation
 
-// TODO: Add Protocol, Refactor, Unit Tests
-// TODO: Inject RequestErrorHandler
-// TODO: Make it final class
-class RequestExecutor {
-    let configuration: Configuration
-    let requestErrorHandler = RequestErrorHandler()
+protocol RequestExecutor {
+    func execute(url: URL,
+                 method: Method,
+                 token: String,
+                 data: Data?,
+                 callback: @escaping (Data?) -> Void)
+}
+
+/// RequestExecutor is thin wrapper around URLSession.
+/// It creates tasks that are specifically setup to match Flex backend expectations.
+final class RequestExecutorImp: RequestExecutor {
+
     let timeoutInterval = 30.0
-    
-    init(configuration: Configuration) {
-        self.configuration = configuration
+
+    private let session: URLSession
+    private let errorHandler: RequestErrorHandler
+
+    // MARK: - Object lifecycle
+
+    /// Initializes an RequestExecutorImp given session and error handler
+    ///
+    /// - Parameters:
+    ///     - session:      An object that coordinates a group of related, network data-transfer tasks.
+    ///     - errorHandler: An object that is resposible for the error handling of Flex backend responses
+    init(_ session: URLSession = .shared,
+         _ errorHandler: RequestErrorHandler = RequestErrorHandlerImp()) {
+        self.session = session
+        self.errorHandler = errorHandler
     }
-    
-    func execute(url: URL, method: Method, data: Data?, callback: @escaping (Data?) -> Void) {
+
+    // MARK: - RequestExecutor
+
+    /// Makes request to a URL and calls handler upon completion
+    ///
+    /// - Parameters:
+    ///     - url:      The endpoint URL
+    ///     - method:   The http request method (GET or POST)
+    ///     - token:    The header value for authentication to the backend
+    ///     - data:     The data that should be send to the server
+    ///     - callback: The completion handler to call when the request is complete
+    ///
+    func execute(url: URL,
+                 method: Method,
+                 token: String,
+                 data: Data?,
+                 callback: @escaping (Data?) -> Void) {
         var request =  URLRequest(url: url,
                                   cachePolicy: .useProtocolCachePolicy,
                                   timeoutInterval: timeoutInterval)
         request.httpMethod = method.rawValue
         request.httpBody = data
         
-        // Authorization
-        let authorizationValue = configuration.shaValue
-        request.addValue(authorizationValue,
-                         forHTTPHeaderField: Constants.RequestExecutor.authHeader)
+        // Authorization header
+        request.addValue(token, forHTTPHeaderField: Constants.RequestExecutor.authHeader)
+        Logger.log(messageFormat: "\(Constants.RequestExecutor.authHeader): \(token)")
+
+        // other headers
         request.addValue(Constants.RequestExecutor.contentTypeValue,
                          forHTTPHeaderField: Constants.RequestExecutor.contentTypeHeader)
-        Logger.log(messageFormat: "\(Constants.RequestExecutor.authHeader): \(authorizationValue)")
-       
-        let updateTask = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
-            guard let strongSelf = self else {
-                callback(nil)
-                return
-            }
-            
-            if strongSelf.requestErrorHandler.handleError(response: response, error: error) {
+
+        let task = session.dataTask(with: request) { [errorHandler] (data, response, error) in
+            if errorHandler.handleError(response: response, error: error) {
                 callback(data)
             } else {
                 callback(nil)
             }
         }
-        updateTask.resume()
+        task.resume()
     }
 }
 

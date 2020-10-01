@@ -33,9 +33,16 @@ final class MockFileServiceImp: FileService {
         _removedFiles
     }
 
-    private var _bundleFileCalls = 0
+    private var _writedFiles: [URL] = []
+    var writedFiles: [URL] {
+        _writedFiles
+    }
 
-    private (set) var isWriteFileCalled: Bool = false
+    var isWriteFileCalled: Bool {
+        !_writedFiles.isEmpty
+    }
+
+    private var _bundleFileCalls = 0
 
     func files(at directory: URL) throws -> [URL] {
         MockFileServiceImp.bundleFiles.map { directory.appendingPathComponent($0) }
@@ -77,7 +84,7 @@ final class MockFileServiceImp: FileService {
     }
 
     func write(_ fileUrl: URL, data contents: Data) throws {
-        isWriteFileCalled = true
+        _writedFiles.append(fileUrl)
     }
 
     func createDirectory(_ directoryUrl: URL) throws {

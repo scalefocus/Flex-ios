@@ -7,17 +7,8 @@
 
 import Foundation
 
-struct Project: Decodable {
-    /// Last version
-    let version: Int
-
-    enum CodingKeys: String, CodingKey {
-        case version = "project_version"
-    }
-}
-
-/// Internal class  locale file
-public final class LocaleFileHandler {
+/// Internal class locale file
+final class LocaleFileHandler {
 
     // MARK: - Default implementation
 
@@ -32,9 +23,9 @@ public final class LocaleFileHandler {
     // MARK: - Initialization
 
     // This approach will allow us to inject all dependecies in the constructor
-    public init(_ settings: SettingsService = SettingsServiceImpl(),
-                _ fileService: FileService = FileServiceImpl(),
-                _ bundleService: BundleService = BundleServiceImpl()) {
+    init(_ settings: SettingsService = SettingsServiceImpl(),
+         _ fileService: FileService = FileServiceImpl(),
+         _ bundleService: BundleService = BundleServiceImpl()) {
         self.settingsService = settings
         self.fileService = fileService
         self.bundleService = bundleService
@@ -46,7 +37,7 @@ public final class LocaleFileHandler {
 
     /// Makes copy of all files from bundle directory to application support directory
     /// Old name was `initialCopyOfLocaleFiles`
-    public func cloneLocaleFilesFromBundleToApplicationSupportDirectory() {
+    func cloneLocaleFilesFromBundleToApplicationSupportDirectory() {
         // try to read the last zip version from the file we received from backend
         let lastReadVersion = readProjectVersionFile()
 
@@ -169,7 +160,7 @@ public final class LocaleFileHandler {
 
      - returns: Content of that file as Data
      */
-    public func readLocaleFile(_ fileName: String, in domain: String = "") -> Data {
+    func readLocaleFile(_ fileName: String, in domain: String = "") -> Data {
         do {
             let localizationsDirectoryUrl = try self.localeFilesDirectoryUrl()
             let localeFileUrl = self.localeFileUrl(fileName,
@@ -201,7 +192,7 @@ public final class LocaleFileHandler {
      - parameter fileName: name of the locale file.
      - returns: Contents of that file or empty Data in case of error
      */
-    public func readBackupFile(_ fileName: String, in domain: String = "") -> Data  {
+    func readBackupFile(_ fileName: String, in domain: String = "") -> Data  {
         do {
             return try readBundleFile(fileName, in: domain)
         } catch let error {
@@ -235,7 +226,7 @@ public final class LocaleFileHandler {
      - parameter domain: Locale domain.
      - returns: `true` if successfull
      */
-    public func writeToFile(_ fileName: String, data: Data, in domain: String) -> Bool {
+    func writeToFile(_ fileName: String, data: Data, in domain: String) -> Bool {
         DispatchQueue.global(qos: .background).sync {
             do {
                 let localizationsDirectoryUrl = try self.localeFilesDirectoryUrl()
@@ -258,7 +249,7 @@ public final class LocaleFileHandler {
     /// - Parameter domain: domain name
     ///
     /// - returns: array of file names for domain name as String values.
-    public func localeFilesNames(in domain: String) -> [String] {
+    func localeFilesNames(in domain: String) -> [String] {
         do {
             // get AppllicationSupport directory
             let localizationsDirectoryUrl = try self.localeFilesDirectoryUrl()
@@ -284,7 +275,7 @@ public final class LocaleFileHandler {
      - Will try to create the directory if it is missing.
      - returns: URL to that directory.
      */
-    public func localeFilesDirectoryUrl() throws -> URL {
+    func localeFilesDirectoryUrl() throws -> URL {
         guard let bundleId = bundleService.bundleIdentifier else {
             throw LocaleFileHandlerError.noBundleId
         }

@@ -7,18 +7,9 @@
 
 import Foundation
 
-/// Protocol which we use to indicate that update is made successfully
-protocol UpdateTranslationsProtocol: class {
-    func didUpdateTranslations(domain: String, translations: [String: String])
-    
-    func didUpdateDomainsVersions(domain: String, version: Int)
-    
-    func getTranslationsForDomain(_ domain: String) -> [String: String]?
-    
-    func getDomainsVersionsInfo() -> [String: Int]
-}
-
 // TODO: Refactor, Unit Tests
+// TODO: Inject `updateService`, `translationsStore` & `networkService`
+// TODO: LocaleFileHandler as property (then inject)
 public class Flexx {
     
     // MARK: Public properies
@@ -37,52 +28,13 @@ public class Flexx {
     /// Default return when we have some kind of error when trying to get string.
     private var defaultReturn: DefaultReturnBehavior = .empty
     
-    /// ConcurrentQueue for managing the reading and writing to transactions.
-    private let concurrentQueue = DispatchQueue(label: "concurrentQueue",
-                                                qos: .userInteractive,
-                                                attributes: .concurrent)
-    
     /// Configuration contains all needed information for making requests.
     private var configuration: Configuration?
     
     private var updateService: UpdateLocaleService?
-    
-    /// The first string is the Domain name and it holds dictionary of [String: String]
-    /// which are the transactions for the current domain
-    private var translations: [String: [String: String]] = [:]
-    
-    /// Synchronizing the access to the translations since it may appear
-    /// simultaneously from multiple threads
-    private var threadSafeTranslations: [String: [String: String]] {
-        get {
-            return concurrentQueue.sync { [unowned self] in
-                self.translations
-            }
-        }
-        set {
-            concurrentQueue.async(flags: .barrier) { [unowned self] in
-                self.translations = newValue
-            }
-        }
-    }
-    
-    /// Holds the domain name and version
-    private var domainsVersions: [String: Int] = [:]
-    
-    /// Synchronizing the access to the domainsVersions since it may appear
-    /// simultaneously from multiple threads
-    private var threadSafeDomainsVersions: [String: Int] {
-        get {
-            return concurrentQueue.sync { [unowned self] in
-                self.domainsVersions
-            }
-        }
-        set {
-            concurrentQueue.async(flags: .barrier) { [unowned self] in
-                self.domainsVersions = newValue
-            }
-        }
-    }
+
+    private var translationsStore: TranslationsStore = TranslationsStoreImp()
+    private var networkService: RequestExecutor = RequestExecutorImp()
     
     private init() { }
     
@@ -130,10 +82,19 @@ public class Flexx {
         
         setValueToDefaultLocale()
         handleLocaleSynchronicallyForDomains(configurationInfo.domains, locale: locale)
-        
-        updateService = UpdateLocaleService(updateTranslationsProtocol: self,
-                                            defaultUpdateInterval: defaultUpdateInterval,
-                                            configuration: configurationInfo)
+
+        let timerService =
+            TimerServiceImp(repeatingInterval: .seconds(defaultUpdateInterval * 60))
+        let storeLocalizationsWorker =
+            StoreLocalizationsWorkerImp(translationsStore: translationsStore,
+                                        fileHandler: LocaleFileHandler.default,
+                                        defaultUpdateInterval: defaultUpdateInterval)
+        let updateLocalizationsWorker =
+            UpdateLocalizationsWorkerImp(networkService: networkService)
+        updateService = UpdateLocaleServiceImp(configuration: configurationInfo,
+                                               timerService: timerService,
+                                               storeLocalizationsWorker: storeLocalizationsWorker,
+                                               updateLocalizationsWorker: updateLocalizationsWorker)
         updateService?.startUpdateService(locale: localeFileName(locale: locale))
         
         registerForAppLifecycle()
@@ -153,16 +114,15 @@ public class Flexx {
     /// - returns: string value representing the value for the requested key
     /// - usage: Flexx.shared.getString(domain: "DomainName" key: "stringKey")
     public func getString(domain: String, key: String) -> String {
-        guard let domainTransactions = threadSafeTranslations[domain],
-            let transaction = domainTransactions[key] else {
-                switch defaultReturn {
-                case .empty:
-                    return ""
-                case .key:
-                    return key
-                case .custom(let customString):
-                    return customString
-                }
+        guard let transaction = translationsStore.string(forKey: key, in: domain) else {
+            switch defaultReturn {
+            case .empty:
+                return ""
+            case .key:
+                return key
+            case .custom(let customString):
+                return customString
+            }
         }
         return transaction
     }
@@ -179,7 +139,7 @@ public class Flexx {
                 return
         }
         
-        threadSafeTranslations = [:]
+        translationsStore.clearAllTranslations()
         currentLocale = desiredLocale
         
         handleLocaleSynchronicallyForDomains(configuration.domains, locale: desiredLocale)
@@ -200,15 +160,16 @@ public class Flexx {
             completion([], Constants.Localizer.configurationIsNotSet)
             return
         }
+
+        let localesContractor = LocalesContractorImp(networkService: networkService,
+                                                     localeFileHandler: LocaleFileHandler.default)
         
-        let localesContractor = LocalesContractor(configuration: configuration)
-        
-        localesContractor.getLocales { languages in
-            if languages.count == 0 {
+        localesContractor.localesFromServer(for: configuration) { languages in
+            if languages.isEmpty {
                 Logger.log(messageFormat: Constants.LocalesContractor.errorRequestForGetLocales)
                 var error: String?
-                let localLanguages = localesContractor.getLocalesFromFiles(for: configuration.domains.first)
-                if localLanguages.count == 0 {
+                let localLanguages = localesContractor.localesFromFiles(in: configuration.domains.first)
+                if localLanguages.isEmpty {
                     error = Constants.LocalesContractor.errorGetingLocalesFromFiles
                 }
                 completion(localLanguages, error)
@@ -301,10 +262,10 @@ public class Flexx {
                 .decode(LocaleTranslations.self, from: localeData)
 
             // 3. Store translations for every domain in one place
-            storeTranslations(domain: localeTranslations.domainId,
-                              translations: localeTranslations.translations)
-            storeDomainsVersions(domain: localeTranslations.domainId,
-                                 version: localeTranslations.version)
+            translationsStore.store(domain: localeTranslations.domainId,
+                                    translations: localeTranslations.translations)
+            translationsStore.store(domain: localeTranslations.domainId,
+                                    version: localeTranslations.version)
         }
         catch let error {
             Logger.log(messageFormat: error.localizedDescription)
@@ -325,7 +286,7 @@ public class Flexx {
         do {
             // 1. Read locale file
             let data = LocaleFileHandler.default
-                .readLocaleFile("config", // TODO: Move to Constants file
+                .readLocaleFile("config", // TODO: Create Constant
                                 in: firstDomain)
 
             // 2. Parse translations to Locale
@@ -341,20 +302,6 @@ public class Flexx {
         } catch let error {
             Logger.log(messageFormat: error.localizedDescription)
         }
-    }
-    
-    /// Store Translations For one Domain.
-    /// - parameter translations: contain translations we should store in our dictionary
-    /// - parameter domain: domain's name
-    private func storeTranslations(domain: String, translations: [String : String]) {
-        threadSafeTranslations[domain] = translations
-    }
-    
-    /// Store DomainsVersions
-    /// - parameter version: domain's version
-    /// - parameter domain: domain's name
-    private func storeDomainsVersions(domain: String, version: Int) {
-        threadSafeDomainsVersions[domain] = version
     }
     
     /// Get the name of specific locale.
@@ -407,25 +354,4 @@ public class Flexx {
                              domains: domains,
                              shaValue: shaValue)
     }
-}
-
-// MARK: UpdateTranslationsProtocol
-extension Flexx: UpdateTranslationsProtocol {
-    
-    func didUpdateTranslations(domain: String, translations: [String: String]) {
-        storeTranslations(domain: domain, translations: translations)
-    }
-    
-    func didUpdateDomainsVersions(domain: String, version: Int) {
-        storeDomainsVersions(domain: domain, version: version)
-    }
-    
-    func getTranslationsForDomain(_ domain: String) -> [String: String]? {
-        return threadSafeTranslations[domain] ?? nil
-    }
-    
-    func getDomainsVersionsInfo() -> [String: Int] {
-        return threadSafeDomainsVersions
-    }
-    
 }

@@ -15,6 +15,11 @@
 		41B574B26FA66FA00327FF02EEFEDF8E /* Domain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636ECBA0DF98C2C6EA68013139DA00B /* Domain.swift */; };
 		41CE3E3925188D1D006588A7 /* BundleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CE3E3825188D1D006588A7 /* BundleService.swift */; };
 		41CE3E4425189EBE006588A7 /* download_strings.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2ECA4E30DCEF2AD7F398BF614AFAACEE /* download_strings.sh */; };
+		41FF30A42521BAB00051205E /* TranslationsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF30A32521BAB00051205E /* TranslationsStore.swift */; };
+		41FF30AC2521BC930051205E /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF30AB2521BC930051205E /* Project.swift */; };
+		41FF30B22521BCE80051205E /* UpdateLocalizationsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF30B12521BCE80051205E /* UpdateLocalizationsWorker.swift */; };
+		41FF30BD2521BD300051205E /* TimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF30BC2521BD300051205E /* TimerService.swift */; };
+		41FF30C82521FB500051205E /* StoreLocalizationsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF30C72521FB500051205E /* StoreLocalizationsWorker.swift */; };
 		4AE459AFAF6C104848DA4F6B6060E753 /* UpdateTranslationsScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB65C84F9EA1C977709472F26EC6FB87 /* UpdateTranslationsScheme.swift */; };
 		5371669EC94D00E2066576AC78B72EFE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		53ED7DAB50D45F58BA3A0240B28CD5D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
@@ -75,6 +80,11 @@
 		41A6CCD82514E8420009847E /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
 		41A6CCDD2514E84E0009847E /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
 		41CE3E3825188D1D006588A7 /* BundleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleService.swift; sourceTree = "<group>"; };
+		41FF30A32521BAB00051205E /* TranslationsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsStore.swift; sourceTree = "<group>"; };
+		41FF30AB2521BC930051205E /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		41FF30B12521BCE80051205E /* UpdateLocalizationsWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLocalizationsWorker.swift; sourceTree = "<group>"; };
+		41FF30BC2521BD300051205E /* TimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerService.swift; sourceTree = "<group>"; };
+		41FF30C72521FB500051205E /* StoreLocalizationsWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreLocalizationsWorker.swift; sourceTree = "<group>"; };
 		4BFC5D5B1A62173613B55F05547B1F27 /* Pods_UpnetixLocalizerDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpnetixLocalizerDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51DF778D2ED569878F49350E397D4A40 /* Pods-UpnetixLocalizer_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-UpnetixLocalizer_Tests-umbrella.h"; sourceTree = "<group>"; };
 		5E8690DE168025BEDD2EECCF7AA7041B /* Pods-UpnetixLocalizer_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UpnetixLocalizer_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -180,7 +190,6 @@
 				659E71CAF8DEFC7F369E9C703A114A89 /* LocalesContractor.swift */,
 				8103D76BD1B1020FF020433462469566 /* RequestErrorHandler.swift */,
 				6F2C0B83B1CD1D5213B908DECFF1142A /* RequestExecutor.swift */,
-				6B82A1628341C4C1D926C11BD7409DD8 /* UpdateLocaleService.swift */,
 			);
 			name = Requests;
 			path = Flexx/Classes/Requests;
@@ -210,8 +219,19 @@
 				41A6CCD82514E8420009847E /* SettingsService.swift */,
 				41A6CCDD2514E84E0009847E /* FileService.swift */,
 				41CE3E3825188D1D006588A7 /* BundleService.swift */,
+				6B82A1628341C4C1D926C11BD7409DD8 /* UpdateLocaleService.swift */,
+				41FF30BC2521BD300051205E /* TimerService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		41FF30B02521BCD60051205E /* Workers */ = {
+			isa = PBXGroup;
+			children = (
+				41FF30B12521BCE80051205E /* UpdateLocalizationsWorker.swift */,
+				41FF30C72521FB500051205E /* StoreLocalizationsWorker.swift */,
+			);
+			path = Workers;
 			sourceTree = "<group>";
 		};
 		505636B1F08D51738E4F28173B16BE81 /* Targets Support Files */ = {
@@ -284,6 +304,8 @@
 				3EB8C9CB01DD90D82C2B40F50D9E8141 /* Language.swift */,
 				1761417CC61951C8C7FF4F5478E4E57F /* LocaleTranslations.swift */,
 				EB65C84F9EA1C977709472F26EC6FB87 /* UpdateTranslationsScheme.swift */,
+				41FF30AB2521BC930051205E /* Project.swift */,
+				41FF30A32521BAB00051205E /* TranslationsStore.swift */,
 			);
 			name = Models;
 			path = Flexx/Classes/Models;
@@ -309,6 +331,7 @@
 				A022A35E6C881FFA930A0C05A79494F3 /* Support Files */,
 				41A6CCD72514E82C0009847E /* Services */,
 				24CF4AFB11E82E31F2438136CF2F154B /* Utils */,
+				41FF30B02521BCD60051205E /* Workers */,
 			);
 			name = Flexx;
 			path = ../..;
@@ -487,7 +510,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				18FF5FA9224A506C94272501AE0D4EB1 /* Config.swift in Sources */,
+				41FF30A42521BAB00051205E /* TranslationsStore.swift in Sources */,
 				41CE3E3925188D1D006588A7 /* BundleService.swift in Sources */,
+				41FF30AC2521BC930051205E /* Project.swift in Sources */,
 				911F13ECE319B24C2D07432EB03BC4AD /* Configuration.swift in Sources */,
 				C8AF6FF1C836E3A540D190667DCFD38C /* Constants.swift in Sources */,
 				E9E3003B6C063C39B17B7566D64D0595 /* DefaultReturnBehavior.swift in Sources */,
@@ -496,12 +521,15 @@
 				2F507E6D1BDE0816B3B58E0A96CDEE12 /* Extensions.swift in Sources */,
 				9D0B51C8A7A3ED23518FFFA154C932B8 /* Flexx-dummy.m in Sources */,
 				75D61AF24BD5046AC06C49974D679479 /* Flexx.swift in Sources */,
+				41FF30BD2521BD300051205E /* TimerService.swift in Sources */,
 				E55AFA72508141BD0B6554464727DA28 /* HttpStatusCode.swift in Sources */,
 				17204E17A3AB4414C679307AE50C2B44 /* Language.swift in Sources */,
 				B2C06A03DD8C729099A5294583BE58B6 /* LocaleFileHandler.swift in Sources */,
+				41FF30C82521FB500051205E /* StoreLocalizationsWorker.swift in Sources */,
 				924DF9D6B19C67CC840486B2F04798DA /* LocaleFileHandlerError.swift in Sources */,
 				7B9F31D6AB23E1870648D14F46122565 /* LocalesContractor.swift in Sources */,
 				D9CC972130EACAA816BEEB4E5A6E2FCD /* LocaleTranslations.swift in Sources */,
+				41FF30B22521BCE80051205E /* UpdateLocalizationsWorker.swift in Sources */,
 				839C90C642E0F578CC4B5FB52C83559C /* Logger.swift in Sources */,
 				5716CF07DA481B632A28235A710138C2 /* RequestErrorHandler.swift in Sources */,
 				D5077BC814CC996BA3A230F2F677C182 /* RequestExecutor.swift in Sources */,

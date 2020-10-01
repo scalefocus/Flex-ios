@@ -7,43 +7,45 @@
 
 import Foundation
 
-// TODO: Add Protocol, Refactor, Unit Tests
-final class RequestErrorHandler {
+protocol RequestErrorHandler {
+    func handleError(response: URLResponse?, error: Error?) -> Bool
+}
+
+/// An object that is resposible for the error handling of Flex backend responses
+final class RequestErrorHandlerImp: RequestErrorHandler {
+
+    /// Http status code validation. Default is accept only success status codes.
+    var validationType: ValidationType {
+        .successCodes
+    }
+
     /// Check if there is some error with request response and Log a proper message about it.
     ///
     /// - Parameters:
     ///   - response: Requests's response if there is such
     ///   - error: Error value if there is such
+    ///
     /// - Returns: Bool value representing if request is successful
     func handleError(response: URLResponse?, error: Error?) -> Bool {
-        var wasSuccessful = true
         if let error = error {
-            // Some kind of network error
-            Logger.log(messageFormat: Constants.RequestErrorHandler.httpRequestError, args: [error.localizedDescription])
-            wasSuccessful = false
+            Logger.log(messageFormat: Constants.RequestErrorHandler.httpRequestError,
+                       args: [error.localizedDescription])
+            return false
         }
-        
-        if let httpResponse = response as? HTTPURLResponse {
-            let successfulRequest = (HttpStatusCode.ok.rawValue ..< HttpStatusCode.multipleChoises.rawValue) ~= httpResponse.statusCode
-            if !successfulRequest {
-                //HTTP error
-                Logger.log(messageFormat: Constants.RequestErrorHandler.requestHttpResponseError, args: [httpResponse.debugDescription])
-                wasSuccessful = false
-            }
-        } else {
-            // Some kind of network error
-            if !response.debugDescription.isEmpty {
-            Logger.log(messageFormat: Constants.RequestErrorHandler.requestResponseError, args: [response.debugDescription])
-            }
-            wasSuccessful = false
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            Logger.log(messageFormat: Constants.RequestErrorHandler.requestResponseError)
+            return false
         }
-        
-        return wasSuccessful
+
+        let validCodes = validationType.statusCodes
+        guard validCodes.isEmpty || validCodes.contains(httpResponse.statusCode) else {
+            Logger.log(messageFormat: Constants.RequestErrorHandler.httpRequestError,
+                       args: [httpResponse.debugDescription])
+            return false
+        }
+
+        return true
     }
-    
-    /// Logs message about creating request error
-    func handleRequestCreationError() {
-        // For now will only Log the error
-        Logger.log(messageFormat: Constants.RequestErrorHandler.couldNotCreateUrlRequest)
-    }
+
 }
