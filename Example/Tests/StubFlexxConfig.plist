@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppId</key>
+	<string>Test</string>
+	<key>BaseUrl</key>
+	<string>http://dummy-base-url.com</string>
+	<key>Domains</key>
+	<array>
+		<string>Login</string>
+		<string>Common</string>
+	</array>
+	<key>Secret</key>
+	<string>Dummy Secret</string>
+	<key>ShaValue</key>
+	<string>Some dummy value</string>
+</dict>
+</plist>

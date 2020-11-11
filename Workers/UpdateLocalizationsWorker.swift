@@ -18,6 +18,8 @@ enum UpdateLocalizationsError: LocalizedError {
     /// can not build endpoint url - configuration base Url is invalid
     case invalidUrl(String)
 
+    // MARK: - LocalizedError
+
     var localizedDescription: String {
         switch self {
         case .encoding(let reason):
@@ -43,17 +45,27 @@ typealias UpdateLocalizationsResultHandler = (UpdateLocalizationsResult) -> Void
 
 protocol UpdateLocalizationsWorker {
     func post(_ scheme: UpdateTranslationsScheme,
-              for configuration: Configuration,
               completion: @escaping UpdateLocalizationsResultHandler)
 }
 
 /// Helper class that requests new data from the server
 final class UpdateLocalizationsWorkerImp: UpdateLocalizationsWorker {
 
-    private var networkService: RequestExecutor
+    // MARK: - Dependencies
 
-    init(networkService: RequestExecutor) {
+    private var networkService: RequestExecutor
+    private var configuration: FlexConfiguration
+
+    // MARK: - Object Lifecycle
+
+    /// Initializes an UpdateLocalizationsWorkerImp with given request executor and configuration
+    ///
+    /// - Parameters:
+    ///     - networkService:           Network requests executor
+    ///     - configuration:            Project specific configuration
+    init(networkService: RequestExecutor, configuration: FlexConfiguration) {
         self.networkService = networkService
+        self.configuration = configuration
     }
 
     // MARK: - UpdateLocalizationsWorker
@@ -61,10 +73,8 @@ final class UpdateLocalizationsWorkerImp: UpdateLocalizationsWorker {
     /// Request updated translations from the server
     ///
     /// - parameter scheme:         The object that should be encoded
-    /// - parameter configuration:  The current configuration
     /// - parameter completion:     The completion handler to call when the work is complete
     func post(_ scheme: UpdateTranslationsScheme,
-              for configuration: Configuration,
               completion: @escaping UpdateLocalizationsResultHandler) {
         guard let url = updateLocalizationsEnpointUrl(for: configuration) else {
             completion(.failure(.invalidUrl(configuration.baseUrl)))
@@ -128,7 +138,7 @@ final class UpdateLocalizationsWorkerImp: UpdateLocalizationsWorker {
     /// - parameter configuration:  The current configuration
     ///
     /// - Returns The endpoint Url, or nil if some error ocures
-    private func updateLocalizationsEnpointUrl(for configuration: Configuration) -> URL? {
+    private func updateLocalizationsEnpointUrl(for configuration: FlexConfiguration) -> URL? {
         URL(string: configuration.baseUrl)?
             .appendingPathComponent(Constants.UpdateLocaleService.relativePath)
     }

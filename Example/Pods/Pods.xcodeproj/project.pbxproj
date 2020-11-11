@@ -10,6 +10,9 @@
 		17204E17A3AB4414C679307AE50C2B44 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB8C9CB01DD90D82C2B40F50D9E8141 /* Language.swift */; };
 		18FF5FA9224A506C94272501AE0D4EB1 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AAF0C4D5BB10C4FA7DB71BEFD5F4E8 /* Config.swift */; };
 		2F507E6D1BDE0816B3B58E0A96CDEE12 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B058B433CB9D0C4B8072AB175455C28B /* Extensions.swift */; };
+		412B1944253EF06F0069AD75 /* FlexConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412B1943253EF06F0069AD75 /* FlexConfiguration.swift */; };
+		412B1965253F2BA60069AD75 /* UpdateDomainsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412B1964253F2BA60069AD75 /* UpdateDomainsWorker.swift */; };
+		4136CC6E25598ECE00F6F0D2 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136CC6D25598ECE00F6F0D2 /* Promise.swift */; };
 		41A6CCD92514E8420009847E /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A6CCD82514E8420009847E /* SettingsService.swift */; };
 		41A6CCDE2514E84E0009847E /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A6CCDD2514E84E0009847E /* FileService.swift */; };
 		41B574B26FA66FA00327FF02EEFEDF8E /* Domain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7636ECBA0DF98C2C6EA68013139DA00B /* Domain.swift */; };
@@ -29,7 +32,6 @@
 		7B9F31D6AB23E1870648D14F46122565 /* LocalesContractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659E71CAF8DEFC7F369E9C703A114A89 /* LocalesContractor.swift */; };
 		839C90C642E0F578CC4B5FB52C83559C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958AD08ED724E7E4C253DB80AF0B45C0 /* Logger.swift */; };
 		8B8AD0797C8F49C3AFB2EF8A7BA3FBD9 /* UniqueQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2FD27258936FBD1DFD8AFC7151939D /* UniqueQueue.swift */; };
-		911F13ECE319B24C2D07432EB03BC4AD /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB9AD5547D903B138FF85B7F8006353 /* Configuration.swift */; };
 		924DF9D6B19C67CC840486B2F04798DA /* LocaleFileHandlerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8B95B2282710B9AB2DE1A8AD4F64AB /* LocaleFileHandlerError.swift */; };
 		9D0B51C8A7A3ED23518FFFA154C932B8 /* Flexx-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD0F9975855E54845AA62F319170147 /* Flexx-dummy.m */; };
 		A2679D596931D01B0257414174C0E1E5 /* Pods-UpnetixLocalizer_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FC97C628034045FDE94D353261948C /* Pods-UpnetixLocalizer_Tests-dummy.m */; };
@@ -76,6 +78,9 @@
 		2F30B22636C60B7FA23C3D514F8D822C /* Pods-UpnetixLocalizerDemo-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-UpnetixLocalizerDemo-umbrella.h"; sourceTree = "<group>"; };
 		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3EB8C9CB01DD90D82C2B40F50D9E8141 /* Language.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
+		412B1943253EF06F0069AD75 /* FlexConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexConfiguration.swift; sourceTree = "<group>"; };
+		412B1964253F2BA60069AD75 /* UpdateDomainsWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDomainsWorker.swift; sourceTree = "<group>"; };
+		4136CC6D25598ECE00F6F0D2 /* Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
 		414E25993ECFDDEB52F32975743551F6 /* Flexx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Flexx.debug.xcconfig; sourceTree = "<group>"; };
 		41A6CCD82514E8420009847E /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
 		41A6CCDD2514E84E0009847E /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
@@ -114,7 +119,6 @@
 		B5C9B4B19F0086A8ACDD35849D902966 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BBDAF354EF727C3C700D1CAC372C3428 /* Pods-UpnetixLocalizerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UpnetixLocalizerDemo.release.xcconfig"; sourceTree = "<group>"; };
 		BC12C078361AD5BA74499BA55D13522F /* Pods-UpnetixLocalizer_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-UpnetixLocalizer_Tests-Info.plist"; sourceTree = "<group>"; };
-		CEB9AD5547D903B138FF85B7F8006353 /* Configuration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		DFD0757768479D71556CFD213B7232F5 /* Pods-UpnetixLocalizer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UpnetixLocalizer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		E3CC73FD605EBE4011CDFB686550E30C /* DefaultReturnBehavior.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultReturnBehavior.swift; sourceTree = "<group>"; };
 		EB65C84F9EA1C977709472F26EC6FB87 /* UpdateTranslationsScheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UpdateTranslationsScheme.swift; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 				21C52E3520CBEC42B08510D8CBAF8292 /* LocaleFileHandler.swift */,
 				958AD08ED724E7E4C253DB80AF0B45C0 /* Logger.swift */,
 				6D2FD27258936FBD1DFD8AFC7151939D /* UniqueQueue.swift */,
+				4136CC6D25598ECE00F6F0D2 /* Promise.swift */,
 			);
 			name = Utils;
 			path = Flexx/Classes/Utils;
@@ -230,6 +235,7 @@
 			children = (
 				41FF30B12521BCE80051205E /* UpdateLocalizationsWorker.swift */,
 				41FF30C72521FB500051205E /* StoreLocalizationsWorker.swift */,
+				412B1964253F2BA60069AD75 /* UpdateDomainsWorker.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -299,13 +305,13 @@
 			isa = PBXGroup;
 			children = (
 				F1AAF0C4D5BB10C4FA7DB71BEFD5F4E8 /* Config.swift */,
-				CEB9AD5547D903B138FF85B7F8006353 /* Configuration.swift */,
 				7636ECBA0DF98C2C6EA68013139DA00B /* Domain.swift */,
 				3EB8C9CB01DD90D82C2B40F50D9E8141 /* Language.swift */,
 				1761417CC61951C8C7FF4F5478E4E57F /* LocaleTranslations.swift */,
 				EB65C84F9EA1C977709472F26EC6FB87 /* UpdateTranslationsScheme.swift */,
 				41FF30AB2521BC930051205E /* Project.swift */,
 				41FF30A32521BAB00051205E /* TranslationsStore.swift */,
+				412B1943253EF06F0069AD75 /* FlexConfiguration.swift */,
 			);
 			name = Models;
 			path = Flexx/Classes/Models;
@@ -513,18 +519,20 @@
 				41FF30A42521BAB00051205E /* TranslationsStore.swift in Sources */,
 				41CE3E3925188D1D006588A7 /* BundleService.swift in Sources */,
 				41FF30AC2521BC930051205E /* Project.swift in Sources */,
-				911F13ECE319B24C2D07432EB03BC4AD /* Configuration.swift in Sources */,
+				412B1944253EF06F0069AD75 /* FlexConfiguration.swift in Sources */,
 				C8AF6FF1C836E3A540D190667DCFD38C /* Constants.swift in Sources */,
 				E9E3003B6C063C39B17B7566D64D0595 /* DefaultReturnBehavior.swift in Sources */,
 				41B574B26FA66FA00327FF02EEFEDF8E /* Domain.swift in Sources */,
 				41A6CCDE2514E84E0009847E /* FileService.swift in Sources */,
 				2F507E6D1BDE0816B3B58E0A96CDEE12 /* Extensions.swift in Sources */,
+				412B1965253F2BA60069AD75 /* UpdateDomainsWorker.swift in Sources */,
 				9D0B51C8A7A3ED23518FFFA154C932B8 /* Flexx-dummy.m in Sources */,
 				75D61AF24BD5046AC06C49974D679479 /* Flexx.swift in Sources */,
 				41FF30BD2521BD300051205E /* TimerService.swift in Sources */,
 				E55AFA72508141BD0B6554464727DA28 /* HttpStatusCode.swift in Sources */,
 				17204E17A3AB4414C679307AE50C2B44 /* Language.swift in Sources */,
 				B2C06A03DD8C729099A5294583BE58B6 /* LocaleFileHandler.swift in Sources */,
+				4136CC6E25598ECE00F6F0D2 /* Promise.swift in Sources */,
 				41FF30C82521FB500051205E /* StoreLocalizationsWorker.swift in Sources */,
 				924DF9D6B19C67CC840486B2F04798DA /* LocaleFileHandlerError.swift in Sources */,
 				7B9F31D6AB23E1870648D14F46122565 /* LocalesContractor.swift in Sources */,

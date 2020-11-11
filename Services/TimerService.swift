@@ -7,9 +7,9 @@
 
 import Foundation
 
-typealias TimerEventHandler = @convention(block) () -> Void
+public typealias TimerEventHandler = @convention(block) () -> Void
 
-protocol TimerService {
+public protocol TimerService {
     func start(_ eventHandler: @escaping TimerEventHandler)
     func stop()
 }
@@ -19,11 +19,11 @@ protocol TimerService {
 /// already resumed
 /// 
 /// TimerService schedules a task that should be performed at specified repeat interval
-final class TimerServiceImp: TimerService {
+public final class TimerServiceImp: TimerService {
 
     private lazy var timer: DispatchSourceTimer = {
         let t = DispatchSource.makeTimerSource()
-        t.schedule(deadline: .now() + self.repeatingInterval,
+        t.schedule(deadline: .now() /*+ self.repeatingInterval*/,
                    repeating: self.repeatingInterval)
         t.setEventHandler(handler: { [weak self] in
             self?.eventHandler?()
@@ -41,7 +41,7 @@ final class TimerServiceImp: TimerService {
     ///
     /// - Parameters:
     ///     - repeatingInterval: A time interval of  seconds, millisconds, microseconds, or nanoseconds. Default is never
-    init(repeatingInterval: DispatchTimeInterval = .never) {
+    public init(repeatingInterval: DispatchTimeInterval = .never) {
         self.repeatingInterval = repeatingInterval
     }
 
@@ -60,13 +60,13 @@ final class TimerServiceImp: TimerService {
     /// This method will update the event handler and will start the timer if it is not running state already
     ///
     /// - parameter eventHandler:   Handler that should be executed when timer fires
-    func start(_ eventHandler: @escaping TimerEventHandler) {
+    public func start(_ eventHandler: @escaping TimerEventHandler) {
         self.eventHandler = eventHandler
         resume()
     }
 
     /// This method will stop the timer if it is not in suspended state already
-    func stop() {
+    public func stop() {
         suspend()
     }
 

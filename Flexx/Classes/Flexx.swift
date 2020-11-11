@@ -29,12 +29,14 @@ public class Flexx {
     private var defaultReturn: DefaultReturnBehavior = .empty
     
     /// Configuration contains all needed information for making requests.
-    private var configuration: Configuration?
+    private var configuration: FlexConfiguration?
     
     private var updateService: UpdateLocaleService?
 
     private var translationsStore: TranslationsStore = TranslationsStoreImp()
     private var networkService: RequestExecutor = RequestExecutorImp()
+
+    private var configurationLoader: ConfigurationLoader = ConfigurationLoaderImp()
     
     private init() { }
     
@@ -54,9 +56,8 @@ public class Flexx {
                            defaultLoggingReturn: DefaultReturnBehavior = .empty,
                            defaultUpdateInterval: Int = 10,
                            completed: (() -> Void)? = nil) {
-        
         // Get configuration information from FlexxConfig.plist
-        guard let configurationInfo = readConfigurationPlist() else {
+        guard let configurationInfo = try? configurationLoader.readConfigurationPlist() else {
             Logger.log(messageFormat: Constants.Localizer.errorInitializingFlex)
             completed?()
             return
@@ -88,13 +89,17 @@ public class Flexx {
         let storeLocalizationsWorker =
             StoreLocalizationsWorkerImp(translationsStore: translationsStore,
                                         fileHandler: LocaleFileHandler.default,
+                                        configuration: configurationInfo,
                                         defaultUpdateInterval: defaultUpdateInterval)
         let updateLocalizationsWorker =
-            UpdateLocalizationsWorkerImp(networkService: networkService)
-        updateService = UpdateLocaleServiceImp(configuration: configurationInfo,
-                                               timerService: timerService,
+            UpdateLocalizationsWorkerImp(networkService: networkService,
+                                         configuration: configurationInfo)
+        let updateDomainsWorker = UpdateDomainsWorkerImp(networkService: networkService,
+                                                         configuration: configurationInfo)
+        updateService = UpdateLocaleServiceImp(timerService: timerService,
                                                storeLocalizationsWorker: storeLocalizationsWorker,
-                                               updateLocalizationsWorker: updateLocalizationsWorker)
+                                               updateLocalizationsWorker: updateLocalizationsWorker,
+                                               domainsWorker: updateDomainsWorker)
         updateService?.startUpdateService(locale: localeFileName(locale: locale))
         
         registerForAppLifecycle()
@@ -261,7 +266,7 @@ public class Flexx {
             let localeTranslations = try decoder
                 .decode(LocaleTranslations.self, from: localeData)
 
-            // 3. Store translations for every domain in one place
+            // 3. Store translations for every domain in one place (in memory)
             translationsStore.store(domain: localeTranslations.domainId,
                                     translations: localeTranslations.translations)
             translationsStore.store(domain: localeTranslations.domainId,
@@ -319,39 +324,5 @@ public class Flexx {
         
         return localeFileName
     }
-    
-    /// Read all properties from FlexxConfig.plist
-    private func readConfigurationPlist() -> Configuration? {
-        var configurationInfo: [String: Any]? = nil
-        if let url = Bundle.main.url(forResource:"FlexxConfig", withExtension: "plist") {
-            do {
-                let data = try Data(contentsOf:url)
-                configurationInfo = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String:Any]
-                return createConfiguration(configurationInfo: configurationInfo)
-            } catch let error {
-                Logger.log(messageFormat: error.localizedDescription)
-            }
-        }
-        Logger.log(messageFormat: Constants.Localizer.errorInConfigurationInittialization)
-        return nil
-    }
-    
-    /// Create Configuration
-    private func createConfiguration(configurationInfo: [String: Any]?) -> Configuration? {
-        guard let configurationInfo = configurationInfo,
-            let appId = configurationInfo["AppId"] as? String,
-            let shaValue = configurationInfo["ShaValue"] as? String,
-            let baseUrl = configurationInfo["BaseUrl"] as? String,
-            let secret = configurationInfo["Secret"] as? String,
-            let domains = configurationInfo["Domains"] as? [String] else {
-                Logger.log(messageFormat: Constants.Localizer.errorInConfigurationInittialization)
-                return nil
-        }
-        
-        return Configuration(baseUrl: baseUrl,
-                             secret: secret,
-                             appId: appId,
-                             domains: domains,
-                             shaValue: shaValue)
-    }
+
 }

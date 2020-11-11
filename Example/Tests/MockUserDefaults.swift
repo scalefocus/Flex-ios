@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Flexx
 
 // !!! Not used for now
 class MockUserDefaults: UserDefaults {

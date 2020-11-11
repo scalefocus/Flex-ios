@@ -68,11 +68,11 @@ class LocalesContractorTests: XCTestCase {
         let sut = LocalesContractorImp(networkService: networkService,
                                               localeFileHandler: .default)
 
-        let configuration = Configuration(baseUrl: baseUrl,
-                                          secret: "Doesn't matter",
-                                          appId: appId,
-                                          domains: [],
-                                          shaValue: "Doesn't matter")
+        let configuration = FlexConfiguration(baseUrl: baseUrl,
+                                              secret: "Doesn't matter",
+                                              appId: appId,
+                                              domains: [],
+                                              shaValue: "Doesn't matter")
 
         // Create an expectation
         let expectation = self.expectation(description: "Languages")

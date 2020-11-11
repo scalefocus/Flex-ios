@@ -136,7 +136,7 @@ public final class FileServiceImpl: FileService {
     /// Creates a directory at the specified URL.
     public func createDirectory(_ directoryUrl: URL) throws {
         guard !fileManager.fileExists(atPath: directoryUrl.path) else {
-            throw FileServiceError.directoryNotFound(directoryUrl.path)
+            return
         }
 
         do {

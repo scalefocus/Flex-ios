@@ -18,7 +18,7 @@ struct Constants {
         static let emptyLocaleBackupFileError = "File for locale %@ is empty when reading backup files."
         static let changedToDefaultLocale = "Locale is changed to %@. This is the default locale."
         static let changeLocaleMissingLanguageCodeError = "Change locale failed because of missing language code"
-        static let errorInConfigurationInittialization = "An error occured while initializing Configuration file. Please check the provided properties in FlexxConfig.plist"
+        static let errorInConfigurationInitialization = "An error occured while initializing Configuration file. Please check the provided properties in FlexxConfig.plist"
         static let errorInitializingFlex = "An error occured while initializing Flexx. Please check the provided properties in FlexxConfig.plist and try again."
         static let localeFileParsingError = "Error occured while parsing the Locale file. Translations are not updated."
         static let errorSetDefaultLocale = "Couldn't get default locale from the backend files."
@@ -37,6 +37,10 @@ struct Constants {
         static let badState = "Update is stopped. Bad state."
         static let invalidLocale = "Locale identifier is invalid"
     }
+
+    struct UpdateDomainsService {
+        static let relativePath = "/api/domains"
+    }
     
     struct FileHandler {
         static let couldNotWriteFileErrorMessage = "Couldn't save updated strings to locale file"
@@ -48,6 +52,7 @@ struct Constants {
         
         static let missingBackupFile = "Backup file for locale %@ is missing"
         static let jsonFileExtension = "json"
+        static let plistFileExtension = "plist"
         static let localizationsPath = "Localizations"
         static let readingLocaleFileErrorMessage = "Error occured while reading %@. Will try to read backup file."
         static let readingLocaleZipFileErrorMessage = "Error occured while reading %@."
@@ -91,5 +96,12 @@ struct Constants {
         static let encodingError = "Encoding error: %@"
         static let decodingError = "Decoding error: %@"
         static let invalidBaseUrlError = "Invalid base URL: %@."
+    }
+
+    struct ConfigurationLoader {
+        static let configurationPlistFileName = "FlexxConfig"
+
+        static let errorPlistNotFound = "An error occured while reading FlexxConfig.plist. Please check that FlexxConfig.plist is included in the target."
+        static let errorInvalidContent = "An error occured while reading FlexxConfig.plist. Please check if it is a valid plist file."
     }
 }

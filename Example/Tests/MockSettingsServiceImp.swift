@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@testable import Flexx
+import Flexx
 
 final class MockSettingsServiceImp: SettingsService {
     private var data: Dictionary<String, Any?> = [:]

@@ -233,6 +233,7 @@ final class LocaleFileHandler {
                 let localeFileUrl = self.localeFileUrl(fileName,
                                                        for: localizationsDirectoryUrl,
                                                        in: domain)
+                try fileService.createDirectory(localeFileUrl.deletingLastPathComponent())
                 try fileService.write(localeFileUrl, data: data)
                 return true
             } catch let error {

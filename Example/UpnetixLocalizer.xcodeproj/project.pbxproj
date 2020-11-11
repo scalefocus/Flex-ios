@@ -14,6 +14,10 @@
 		1A40A2881FE3E6DB00E4FCE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A40A2871FE3E6DB00E4FCE7 /* Assets.xcassets */; };
 		1A40A28B1FE3E6DB00E4FCE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A40A2891FE3E6DB00E4FCE7 /* LaunchScreen.storyboard */; };
 		1CAA73994CD836F76B0A37B9 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		412B194C253F12370069AD75 /* StubFlexxConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 412B194B253F12370069AD75 /* StubFlexxConfig.plist */; };
+		412B1952253F180D0069AD75 /* ConfigurationLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412B1951253F180D0069AD75 /* ConfigurationLoaderTests.swift */; };
+		412B196A253F32860069AD75 /* StubDomains.json in Resources */ = {isa = PBXBuildFile; fileRef = 412B1969253F32860069AD75 /* StubDomains.json */; };
+		412B1970253F330E0069AD75 /* UpdateDomainsWorkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412B196F253F330E0069AD75 /* UpdateDomainsWorkerTests.swift */; };
 		4185A5F4251DCFBF0066BF30 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4185A5F3251DCFBF0066BF30 /* MockURLProtocol.swift */; };
 		41A107442518FEB400C92712 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A107432518FEB400C92712 /* TestHelper.swift */; };
 		41A1074F251B6F2C00C92712 /* MockSettingsServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A10747251B6F0A00C92712 /* MockSettingsServiceImp.swift */; };
@@ -52,6 +56,10 @@
 		1A40A28A1FE3E6DB00E4FCE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A40A28C1FE3E6DB00E4FCE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		342C42A9E36FF660A1672037 /* Pods_UpnetixLocalizer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UpnetixLocalizer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		412B194B253F12370069AD75 /* StubFlexxConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = StubFlexxConfig.plist; sourceTree = "<group>"; };
+		412B1951253F180D0069AD75 /* ConfigurationLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationLoaderTests.swift; sourceTree = "<group>"; };
+		412B1969253F32860069AD75 /* StubDomains.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StubDomains.json; sourceTree = "<group>"; };
+		412B196F253F330E0069AD75 /* UpdateDomainsWorkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDomainsWorkerTests.swift; sourceTree = "<group>"; };
 		4185A5F3251DCFBF0066BF30 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		41A107432518FEB400C92712 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		41A10747251B6F0A00C92712 /* MockSettingsServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsServiceImp.swift; sourceTree = "<group>"; };
@@ -150,8 +158,10 @@
 		41FF30F9252228200051205E /* Stubs */ = {
 			isa = PBXGroup;
 			children = (
+				412B194B253F12370069AD75 /* StubFlexxConfig.plist */,
 				41FF30FA252228470051205E /* StubLocales.json */,
 				41F426F425235E15003BEA40 /* StubUpdates.json */,
+				412B1969253F32860069AD75 /* StubDomains.json */,
 			);
 			name = Stubs;
 			sourceTree = "<group>";
@@ -190,6 +200,8 @@
 				41F426EE2523212C003BEA40 /* UpdateLocalizationsWorkerTests.swift */,
 				41F426FA2523815F003BEA40 /* UpdateLocaleServiceTests.swift */,
 				41F427052524C496003BEA40 /* StoreLocalizationsWorkerTests.swift */,
+				412B1951253F180D0069AD75 /* ConfigurationLoaderTests.swift */,
+				412B196F253F330E0069AD75 /* UpdateDomainsWorkerTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -323,6 +335,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				41FF31002522289A0051205E /* StubLocales.json in Resources */,
+				412B196A253F32860069AD75 /* StubDomains.json in Resources */,
+				412B194C253F12370069AD75 /* StubFlexxConfig.plist in Resources */,
 				41F426F525235E15003BEA40 /* StubUpdates.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -428,8 +442,10 @@
 				41F426FB2523815F003BEA40 /* UpdateLocaleServiceTests.swift in Sources */,
 				4185A5F4251DCFBF0066BF30 /* MockURLProtocol.swift in Sources */,
 				41F427062524C496003BEA40 /* StoreLocalizationsWorkerTests.swift in Sources */,
+				412B1952253F180D0069AD75 /* ConfigurationLoaderTests.swift in Sources */,
 				41AAF4EF250B4E30004A397C /* MockUserDefaults.swift in Sources */,
 				41AAF4DE2507A697004A397C /* LocaleFileHandlerTests.swift in Sources */,
+				412B1970253F330E0069AD75 /* UpdateDomainsWorkerTests.swift in Sources */,
 				41F4270225249ECF003BEA40 /* MockTimerService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

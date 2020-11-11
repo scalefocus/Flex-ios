@@ -32,8 +32,16 @@ class StoreLocalizationsWorkerTests: XCTestCase {
                                         fileService,
                                         bundleService)
 
+        // Create configuration
+        let configuration = FlexConfiguration(baseUrl: "http://localizer.upnetix.ut",
+                                              secret: "Doesn't matter",
+                                              appId: appId,
+                                              domains: [],
+                                              shaValue: "Doesn't matter")
+
         sut = StoreLocalizationsWorkerImp(translationsStore: translationsStore,
                                           fileHandler: fileHandler,
+                                          configuration: configuration,
                                           defaultUpdateInterval: defaultUpdateInterval)
     }
 
@@ -106,15 +114,10 @@ class StoreLocalizationsWorkerTests: XCTestCase {
     func testShouldCreateNewScheme() {
         // Given
         let locale = "en-GB"
-        let configuration = Configuration(baseUrl: "http://localizer.upnetix.ut",
-                                          secret: "Doesn't matter",
-                                          appId: appId,
-                                          domains: [],
-                                          shaValue: "Doesn't matter")
         translationsStore.store(domain: "Common", version: 1597407235051)
 
         // When
-        let scheme = sut.scheme(locale: locale, for: configuration)
+        let scheme = sut.scheme(for: locale)
 
         // Then
         XCTAssertEqual(scheme.domains.first!.version,

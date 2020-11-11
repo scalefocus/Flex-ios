@@ -11,7 +11,7 @@ typealias UpdateServiceHandler = () -> Void
 
 protocol StoreLocalizationsWorker {
     func store(receivedScheme: UpdateTranslationsScheme)
-    func scheme(locale: String, for configuration: Configuration) -> UpdateTranslationsScheme
+    func scheme(for locale: String) -> UpdateTranslationsScheme
 }
 
 /// Stores upates in translations
@@ -19,6 +19,7 @@ final class StoreLocalizationsWorkerImp: StoreLocalizationsWorker {
     private let translationsStore: TranslationsStore
     private let fileHandler: LocaleFileHandler
     private let defaultUpdateInterval: Int
+    private var configuration: FlexConfiguration
 
     // MARK: - Object lifecycle
 
@@ -27,13 +28,16 @@ final class StoreLocalizationsWorkerImp: StoreLocalizationsWorker {
     /// - Parameters:
     ///     - translationsStore:        Translations in-memory cache
     ///     - fileHandler:              Handles data persistence
+    ///     - configuration:            Project specific configuration
     ///     - defaultUpdateInterval:    A time interval in millisconds
     init(translationsStore: TranslationsStore,
          fileHandler: LocaleFileHandler,
+         configuration: FlexConfiguration,
          defaultUpdateInterval: Int) {
         self.translationsStore = translationsStore
         self.fileHandler = fileHandler
         self.defaultUpdateInterval = defaultUpdateInterval
+        self.configuration = configuration
     }
 
     // MARK: - StoreLocalizationsWorker
@@ -80,10 +84,9 @@ final class StoreLocalizationsWorkerImp: StoreLocalizationsWorker {
     ///
     /// - Parameters:
     ///     - locale:           Locale identifier
-    ///     - configuration:    Project specific configuration
     ///
     /// - Returns the scheme for updating the translations
-    func scheme(locale: String, for configuration: Configuration) -> UpdateTranslationsScheme {
+    func scheme(for locale: String) -> UpdateTranslationsScheme {
         let domainsVersions = translationsStore.allDomainsVersions()
         let domains = domainsVersions.map {
             Domain(domainId: $0.key, version: $0.value, translations: nil)

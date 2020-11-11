@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@testable import Flexx
+import Flexx
 
 final class MockTimerService: TimerService {
     private var eventHandler: (() -> Void)?

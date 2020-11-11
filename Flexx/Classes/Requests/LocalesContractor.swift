@@ -12,7 +12,8 @@ typealias LocalesHandler = ([Language]) -> Void
 
 // ??? Can be renamed to Worker
 protocol LocalesContractor {
-    func localesFromServer(for configuration: Configuration, completion: @escaping LocalesHandler)
+    func localesFromServer(for configuration: FlexConfiguration,
+                           completion: @escaping LocalesHandler)
     func localesFromFiles(in domain: String?) -> [Language]
 }
 
@@ -35,7 +36,7 @@ final class LocalesContractorImp: LocalesContractor {
     /// - parameter completion:     The completion handler to call when the request is complete
     ///
     /// - returns:                  Array of languages
-    func localesFromServer(for configuration: Configuration, completion: @escaping LocalesHandler) {
+    func localesFromServer(for configuration: FlexConfiguration, completion: @escaping LocalesHandler) {
         guard let url = localesServiceUrl(for: configuration) else {
             Logger.log(messageFormat: Constants.RequestErrorHandler.couldNotCreateUrlRequest)
             completion([])
@@ -54,7 +55,7 @@ final class LocalesContractorImp: LocalesContractor {
     }
 
     /// - Returns URL to the server's endpoing
-    private func localesServiceUrl(for configuration: Configuration) -> URL? {
+    private func localesServiceUrl(for configuration: FlexConfiguration) -> URL? {
         URL(string:
                 configuration.baseUrl
                 + Constants.LocalesContractor.relativePath

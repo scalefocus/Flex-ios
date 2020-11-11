@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@testable import Flexx
+import Flexx
 
 final class MockBundleServiceImp: BundleService {
 
@@ -33,4 +33,10 @@ final class MockBundleServiceImp: BundleService {
             .appendingPathComponent(fileName)
             .appendingPathExtension("json")
     }
+
+    var configurationUrl: URL? {
+        let bundle = Bundle(for: MockBundleServiceImp.self)
+        return bundle.url(forResource: "StubFlexxConfig", withExtension: "plist")
+    }
+
 }

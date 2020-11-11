@@ -26,7 +26,7 @@ final class RequestExecutorImp: RequestExecutor {
 
     // MARK: - Object lifecycle
 
-    /// Initializes an RequestExecutorImp given session and error handler
+    /// Initializes an RequestExecutorImp with given session and error handler
     ///
     /// - Parameters:
     ///     - session:      An object that coordinates a group of related, network data-transfer tasks.

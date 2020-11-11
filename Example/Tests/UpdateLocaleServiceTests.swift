@@ -19,19 +19,30 @@ class UpdateLocaleServiceTests: XCTestCase {
         "dummy-app-id"
     }
 
-    private var apiUrl: URL {
-        URL(string:baseUrl)!
-            .appendingPathComponent(Constants.UpdateLocaleService.relativePath)
-    }
+//    private var apiUrl: URL {
+//        URL(string:baseUrl)!
+//            .appendingPathComponent(Constants.UpdateLocaleService.relativePath)
+//    }
 
-    private lazy var data: Data = {
-        try! Data(contentsOf: stubUrl)
-    }()
-
-    private lazy var stubUrl: URL = {
-        Bundle(for: UpdateLocaleServiceTests.self)
+    private lazy var localizationsData: Data = {
+        let url = Bundle(for: UpdateLocaleServiceTests.self)
             .url(forResource: "StubUpdates", withExtension: "json")!
+        return try! Data(contentsOf: url)
     }()
+
+    private lazy var domainsData: Data = {
+        let url = Bundle(for: UpdateLocaleServiceTests.self)
+            .url(forResource: "StubDomains", withExtension: "json")!
+        return try! Data(contentsOf: url)
+    }()
+
+    private func data(for url: URL) -> Data {
+        if url.absoluteString.contains(Constants.UpdateLocaleService.relativePath) {
+            return localizationsData
+        } else {
+            return domainsData
+        }
+    }
 
     private var timerService: MockTimerService!
     private var translationsStore: TranslationsStore!
@@ -40,11 +51,13 @@ class UpdateLocaleServiceTests: XCTestCase {
 
     override func setUpWithError() throws {
         MockURLProtocol.requestHandler = { request in
-            let response = HTTPURLResponse(url: self.apiUrl,
+            let url = request.url!
+            let response = HTTPURLResponse(url: url,
                                            statusCode: 200,
                                            httpVersion: nil,
                                            headerFields: nil)!
-            return (response, self.data)
+            let data = self.data(for: url)
+            return (response, data)
         }
 
         // Create URL Session Configed with our Mock Protocol
@@ -52,10 +65,18 @@ class UpdateLocaleServiceTests: XCTestCase {
         sessionConfig.protocolClasses = [MockURLProtocol.self]
         let urlSession = URLSession(configuration: sessionConfig)
 
+        // Create configuration
+        let configuration = FlexConfiguration(baseUrl: baseUrl,
+                                              secret: "Doesn't matter",
+                                              appId: appId,
+                                              domains: [],
+                                              shaValue: "Doesn't matter")
+
         // Create network worker
         let networkService = RequestExecutorImp(urlSession)
         let updateLocalizationsWorker =
-            UpdateLocalizationsWorkerImp(networkService: networkService)
+            UpdateLocalizationsWorkerImp(networkService: networkService,
+                                         configuration: configuration)
 
         // create store worker
         let settingsService = MockSettingsServiceImp()
@@ -70,20 +91,19 @@ class UpdateLocaleServiceTests: XCTestCase {
         let storeLocalizationsWorker =
             StoreLocalizationsWorkerImp(translationsStore: translationsStore,
                                         fileHandler: fileHandler,
+                                        configuration: configuration,
                                         defaultUpdateInterval: defaultUpdateInterval)
+        let updateDomainsWorker = UpdateDomainsWorkerImp(networkService: networkService,
+                                                         configuration: configuration)
 
         // create timer service
         timerService = MockTimerService()
         // create sut
-        let configuration = Configuration(baseUrl: baseUrl,
-                                          secret: "Doesn't matter",
-                                          appId: appId,
-                                          domains: [],
-                                          shaValue: "Doesn't matter")
-        sut = UpdateLocaleServiceImp(configuration: configuration,
-                                     timerService: timerService,
+
+        sut = UpdateLocaleServiceImp(timerService: timerService,
                                      storeLocalizationsWorker: storeLocalizationsWorker,
-                                     updateLocalizationsWorker: updateLocalizationsWorker)
+                                     updateLocalizationsWorker: updateLocalizationsWorker,
+                                     domainsWorker: updateDomainsWorker)
 
     }
 
@@ -98,8 +118,8 @@ class UpdateLocaleServiceTests: XCTestCase {
         // When
         timerService.elapseTime()
 
-        // Just wait 5 seconds.
-        sleep(5)
+        // Just wait 10 seconds before proceed
+        sleep(10)
 
         // Then
         XCTAssert(timerService.isRuning, "Timer service should be running")

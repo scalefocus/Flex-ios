@@ -1,15 +1,15 @@
 //
-//  UpdateLocalizationsWorkerTests.swift
+//  UpdateDomainsWorkerTests.swift
 //  UpnetixLocalizer_Tests
 //
-//  Created by Aleksandar Sergeev Petrov on 29.09.20.
+//  Created by Aleksandar Sergeev Petrov on 20.10.20.
 //  Copyright © 2020 Upnetix. All rights reserved.
 //
 
 import XCTest
 @testable import Flexx
 
-class UpdateLocalizationsWorkerTests: XCTestCase {
+class UpdateDomainsWorkerTests: XCTestCase {
 
     private var baseUrl: String {
         "http://localizer.upnetix.ut"
@@ -20,23 +20,27 @@ class UpdateLocalizationsWorkerTests: XCTestCase {
     }
 
     private var apiUrl: URL {
-        URL(string:baseUrl)!
-            .appendingPathComponent(Constants.UpdateLocaleService.relativePath)
+        var urlComponents = URLComponents(string: baseUrl)!
+
+        urlComponents.path = Constants.UpdateDomainsService.relativePath
+        urlComponents.queryItems = [URLQueryItem(name: "app_id", value: appId)]
+
+        return urlComponents.url!
     }
 
     private lazy var stubUrl: URL = {
-        Bundle(for: UpdateLocalizationsWorkerTests.self)
-            .url(forResource: "StubUpdates", withExtension: "json")!
+        Bundle(for: UpdateDomainsWorkerTests.self)
+            .url(forResource: "StubDomains", withExtension: "json")!
     }()
 
     private lazy var data: Data = {
         try! Data(contentsOf: stubUrl)
     }()
 
-    private lazy var updates: UpdateTranslationsScheme = {
+    private lazy var domains: [Domain] = {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try! decoder.decode(UpdateTranslationsScheme.self, from: data)
+        return try! decoder.decode([Domain].self, from: data)
     }()
 
     override func setUpWithError() throws {
@@ -53,7 +57,7 @@ class UpdateLocalizationsWorkerTests: XCTestCase {
         // Do something
     }
 
-    func testContractorShouldGetLanguagesFromServer() {
+    func testContractorShouldGetDomainsFromServer() {
         // Given
         // Create URL Session Configed with our Mock Protocol
         let sessionConfig = URLSessionConfiguration.default
@@ -69,23 +73,21 @@ class UpdateLocalizationsWorkerTests: XCTestCase {
 
         // Create Contractor
         let networkService = RequestExecutorImp(urlSession)
-        let sut = UpdateLocalizationsWorkerImp(networkService: networkService,
-                                               configuration: configuration)
+        let sut = UpdateDomainsWorkerImp(networkService: networkService,
+                                         configuration: configuration)
 
-        let scheme = UpdateTranslationsScheme(appId: appId,
-                                              locale: "en-GB",
-                                              domains: [])
+
 
         // Create an expectation
-        let expectation = self.expectation(description: "Update")
-        var _updates: UpdateTranslationsScheme?
-        var _error: UpdateLocalizationsError?
+        let expectation = self.expectation(description: "Domains")
+        var _domains: [Domain]?
+        var _error: UpdateDomainsError?
 
         // When
-        sut.post(scheme) { result in
+        sut.get { result in
             switch result {
-            case .success(let newScheme):
-                _updates = newScheme
+            case .success(let newDomains):
+                _domains = newDomains
             case .failure(let error):
                 _error = error
             }
@@ -101,9 +103,9 @@ class UpdateLocalizationsWorkerTests: XCTestCase {
 
         // Then
         XCTAssertNil(_error, "Error should be nil")
-        XCTAssertEqual(_updates,
-                       updates,
-                       "Scheme returned from the service should match scheme from the stub file.")
+        XCTAssertEqual(_domains,
+                       domains,
+                       "Domains returned from the service should match domains from the stub file.")
     }
 
 }
