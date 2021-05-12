@@ -59,8 +59,8 @@ After that fill the needed information. You can use the template from below.
 	</array>
 	<key>Secret</key>
 	<string>Your App Secret Here</string>
-    <key>ShaValue</key>
-    <string>ShaValue here</string>
+    	<key>ShaValue</key>
+    	<string>ShaValue here</string>
 </dict>
 </plist>
 
