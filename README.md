@@ -59,6 +59,8 @@ After that fill the needed information. You can use the template from below.
 	</array>
 	<key>Secret</key>
 	<string>Your App Secret Here</string>
+    <key>ShaValue</key>
+    <string>ShaValue here</string>
 </dict>
 </plist>
 
@@ -71,6 +73,8 @@ BaseUrl - strings provider service url
 Secret - used for authentication for calls to the library (This is the secret used when creating the app in the console)
 
 Domains - these are all domain names
+
+ShaValue -  this is hashed AppId + Secret String with SHA256 algorithm.
 
 After that all you need is to import Flexx:
 
