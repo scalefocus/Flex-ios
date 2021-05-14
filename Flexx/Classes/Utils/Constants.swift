@@ -19,8 +19,8 @@ struct Constants {
         static let emptyLocaleBackupFileError = "File for locale %@ is empty when reading backup files."
         static let changedToDefaultLocale = "Locale is changed to %@. This is the default locale."
         static let changeLocaleMissingLanguageCodeError = "Change locale failed because of missing language code"
-        static let errorInConfigurationInittialization = "An error occured while initializing Configuration file. Please check the provided properties in Configuration.plist"
-        static let errorInitializingFlex = "An error occured while initializing Flexx. Please check the provided properties in Configuration.plist and try again."
+        static let errorInConfigurationInittialization = "An error occured while initializing Configuration file. Please check the provided properties in FlexxConfig.plist"
+        static let errorInitializingFlex = "An error occured while initializing Flexx. Please check the provided properties in FlexxConfig.plist and try again."
         static let localeFileParsingError = "Error occured while parsing the Locale file. Translations are not updated."
         static let errorSetDefaultLocale = "Couldn't get default locale from the backend files."
         static let configurationIsNotSet = "Configuration is not set. Please check it and try again."
@@ -48,6 +48,7 @@ struct Constants {
         static let jsonFileExtension = "json"
         static let localizationsPath = "Localizations"
         static let readingLocaleFileErrorMessage = "Error occured while reading %@. Will try to read backup file."
+        static let readingLocaleZipFileErrorMessage = "Error occured while reading %@."
         static let zipFileVersionFileName = "project"
     }
     
@@ -56,7 +57,8 @@ struct Constants {
     }
     
     struct LocalesContractor {
-        static let errorRequestForGetLocales = "Languages are loaded from User Defaults. Request for getting locales failed or return empty list of languages."
+        static let errorRequestForGetLocales = "Languages are loaded from local files. Request for getting locales failed or return empty list of languages."
+        static let errorGetingLocalesFromFiles = "Languages can't be retrieved from local files."
         static let relativePath = "/api/locales"
         static let localizationsPath = "localizations"
     }

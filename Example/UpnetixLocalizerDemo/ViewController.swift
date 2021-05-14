@@ -18,6 +18,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         firstLabel.text = Flexx.shared.getString(domain: "Domain", key: "key")
+        
+        Flexx.shared.getAvailableLocales(withCompletion: { languages, error in
+            
+        })
     }
     
     @IBAction func reloadInputViews(_ sender: Any) {

@@ -4,3 +4,7 @@ platform :ios, '9.3'
 target 'UpnetixLocalizerDemo' do
     pod 'Flexx', :path => '../'
 end
+
+target 'UpnetixLocalizerDemoSecondTarget' do
+  pod 'Flexx', :path => '../'
+end

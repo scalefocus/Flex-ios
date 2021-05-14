@@ -92,15 +92,15 @@ public class Flexx {
     ///   - locale: the current device locale.
     ///   - enableLogging: enabled if true. False by default.
     ///   - defaultLoggingReturn: desired behavior when no key found. Empty by default.
-    ///   - defaultUpdateInterval: interval time to check for update.
+    ///   - defaultUpdateInterval: interval time to check for update in minutes.
     ///   - completed: an optional callback when initialization process has finished.
     public func initialize(locale: Locale,
                            enableLogging: Bool = false,
                            defaultLoggingReturn: DefaultReturnBehavior = .empty,
-                           defaultUpdateInterval: Int = 600000,
+                           defaultUpdateInterval: Int = 10,
                            completed: (() -> Void)? = nil) {
         
-        // Get configuration information from Configuration.plist
+        // Get configuration information from FlexxConfig.plist
         guard let configurationInfo = readConfigurationPlist() else {
             Logger.log(messageFormat: Constants.Localizer.errorInitializingFlex)
             completed?()
@@ -197,10 +197,16 @@ public class Flexx {
         }
         
         let localesContractor = LocalesContractor(configuration: configuration)
+        
         localesContractor.getLocales { languages in
             if languages.count == 0 {
-                completion(localesContractor.getStoredLocales(), Constants.LocalesContractor.errorRequestForGetLocales)
                 Logger.log(messageFormat: Constants.LocalesContractor.errorRequestForGetLocales)
+                var error: String?
+                let localLanguages = localesContractor.getLocalesFromFiles(for: configuration.domains.first)
+                if localLanguages.count == 0 {
+                    error = Constants.LocalesContractor.errorGetingLocalesFromFiles
+                }
+                completion(localLanguages, error)
                 return
             }
             completion(languages, nil)
@@ -348,10 +354,10 @@ public class Flexx {
         return localeFileName
     }
     
-    /// Read all properties from Configuration.plist
+    /// Read all properties from FlexxConfig.plist
     private func readConfigurationPlist() -> Configuration? {
         var configurationInfo: [String: Any]? = nil
-        if let url = Bundle.main.url(forResource:"Configuration", withExtension: "plist") {
+        if let url = Bundle.main.url(forResource:"FlexxConfig", withExtension: "plist") {
             do {
                 let data = try Data(contentsOf:url)
                 configurationInfo = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String:Any]

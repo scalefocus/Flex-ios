@@ -143,6 +143,23 @@ class LocaleFileHandler {
         }
         return fileContents
     }
+
+    /// Method returns array of fine names for domain name as String values
+    /// - Parameter domain: domain name
+    static func getFilesNames(from domain: String) -> [String] {
+        guard !domain.isEmpty else { return [] } // when domain name is empty we don't have a domain therefore we don't have locale files and cannot continue.
+        do {
+            let localizationsDirectoryUrl = try getLocalizationsDirectory().appendingPathComponent("\(domain)")
+            let directoryContents = try FileManager.default.contentsOfDirectory(at: localizationsDirectoryUrl, includingPropertiesForKeys: nil)
+            let jsonFiles = directoryContents.filter{ $0.pathExtension == Constants.FileHandler.jsonFileExtension }
+            return jsonFiles.map{ $0.deletingPathExtension().lastPathComponent }
+        }
+        catch {
+            Logger.log(messageFormat: error.localizedDescription)
+            Logger.log(messageFormat: Constants.FileHandler.readingLocaleZipFileErrorMessage, args: [domain])
+            return []
+        }
+    }
     
     private static func readFile(at url: URL) throws -> Data {
         var fileContents: Data = Data()
