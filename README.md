@@ -122,7 +122,7 @@ Flexx.shared.changeLocale(desiredLocale: Locale(identifier: "en-GB"))
 
 Get all available locales:
 ```swift
- Flexx.shared.getAvailableLocales { languages, error  in
+Flexx.shared.getAvailableLocales { languages, error  in
     for language in languages {
 	print("LANGUAGE: \(language.code), \(language.name)")
     }
