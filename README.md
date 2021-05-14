@@ -66,15 +66,15 @@ After that fill the needed information. You can use the template from below.
 
 ```
 
-AppId - identifier of the application.
+AppId - identifier of the application in the app console
 
 BaseUrl - strings provider service url
 
-Secret - used for authentication for calls to the library (This is the secret used when creating the app in the console)
+Secret - This is the secret used when creating the app in the console. It is used for authentication for calls to the library together with the AppId. For more info read the description of ShaValue.
 
-Domains - these are all domain names
+Domains - these are all domain names that you have in the app console
 
-ShaValue -  this is hashed AppId + Secret String with SHA256 algorithm.
+ShaValue -  this is hashed AppId + Secret String with SHA256 algorithm that is used for the X-Authorization header. Easiest way to get this value is to use any of the SHA256 online generators. Just paste the AppId and the Secret next to each other and the generator will do the rest
 
 After that all you need is to import Flexx:
 
@@ -87,25 +87,25 @@ Flexx contains several methods. One of them is mandatory in order to use the lib
 Initialization of Flexx. This method should be called as early as possible like in AppDelegate's method **didFinishLaunchingWithOptions:**. This method is mandatory and should be called only once.
 
 ```swift
-  let locale = Locale(identifier: "en-GB")
-  Flexx.shared.initialize(locale: locale)
+let locale = Locale(identifier: "en-GB")
+Flexx.shared.initialize(locale: locale)
 ```
 
 or you can use the extended init method:
 
 ```swift
-  let locale = Locale(identifier: "en-GB")
-  Flexx.shared.initialize(locale: locale,
-                        	enableLogging: true,
-                            defaultLoggingReturn: .key,
-                            defaultUpdateInterval: 600000,
-                            completed: nil)
+let locale = Locale(identifier: "en-GB")
+Flexx.shared.initialize(locale: locale,
+                        enableLogging: true,
+                        defaultLoggingReturn: .key,
+                        defaultUpdateInterval: 600000,
+                        completed: nil)
 ```
 
 After the initialization you can get the string you need by calling this:
 
 ```swift
-	let myString = Flexx.shared.getString(domain: "Domain-name-here", key: "word-key-here")
+let myString = Flexx.shared.getString(domain: "Domain-name-here", key: "word-key-here")
 ```
 
 Here are the rest optional methods that you can use:
@@ -123,13 +123,13 @@ Flexx.shared.changeLocale(desiredLocale: Locale(identifier: "en-GB"))
 Get all available locales:
 ```swift
  Flexx.shared.getAvailableLocales { languages, error  in
-            for language in languages {
-                print("LANGUAGE: \(language.code), \(language.name)")
-            }
-            if let error = error {
-                print("Error: \(error)")
-            }
-        }
+    for language in languages {
+	print("LANGUAGE: \(language.code), \(language.name)")
+    }
+    if let error = error {
+	print("Error: \(error)")
+    }
+}
 ```
 
 ## License
