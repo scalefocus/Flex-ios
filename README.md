@@ -66,6 +66,10 @@ After that fill the needed information. You can use the template from below.
 
 ```
 
+If you have several build targets (eg. develop, prod, etc.) you need to add the Configuration.plist file in each of theirs corresponding folders.
+
+The flex website for this app will be refered as app console
+
 AppId - identifier of the application in the app console
 
 BaseUrl - strings provider service url
