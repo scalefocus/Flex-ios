@@ -8,9 +8,8 @@
 struct Constants {
     
     struct RequestErrorHandler {
-        static let httpRequestError = "Error: %@"
-        static let requestResponseError = "Not http Error(Some kind of network error): %@"
-        static let requestHttpResponseError = "HTTP Error: %@"
+        static let httpRequestError = "Network error: %@"
+        static let requestResponseError = "Invalid network response"
         static let couldNotCreateUrlRequest = "Couldn't create update request object."
     }
     
@@ -19,7 +18,7 @@ struct Constants {
         static let emptyLocaleBackupFileError = "File for locale %@ is empty when reading backup files."
         static let changedToDefaultLocale = "Locale is changed to %@. This is the default locale."
         static let changeLocaleMissingLanguageCodeError = "Change locale failed because of missing language code"
-        static let errorInConfigurationInittialization = "An error occured while initializing Configuration file. Please check the provided properties in FlexxConfig.plist"
+        static let errorInConfigurationInitialization = "An error occured while initializing Configuration file. Please check the provided properties in FlexxConfig.plist"
         static let errorInitializingFlex = "An error occured while initializing Flexx. Please check the provided properties in FlexxConfig.plist and try again."
         static let localeFileParsingError = "Error occured while parsing the Locale file. Translations are not updated."
         static let errorSetDefaultLocale = "Couldn't get default locale from the backend files."
@@ -31,9 +30,16 @@ struct Constants {
         static let couldNotUpdateTranslations = "Couldn't update current locale file and in memory translations"
         static let emptyTranslations = "There are no translations to be updated"
         static let currentlyUpdatingMessage = "There is an update that is currently in progress. Your update request is enqueued"
-        static let missingUpdateScheme = "Update service was not started because no scheme was provided"
+        static let missingUpdateScheme = "No scheme was provided"
         static let relativePath = "/api/localizations/v1.1/update_check"
         static let successfulUpdate = "Update is successful for %@"
+        static let updateError = "Update error: %@"
+        static let badState = "Update is stopped. Bad state."
+        static let invalidLocale = "Locale identifier is invalid"
+    }
+
+    struct UpdateDomainsService {
+        static let relativePath = "/api/domains"
     }
     
     struct FileHandler {
@@ -46,10 +52,23 @@ struct Constants {
         
         static let missingBackupFile = "Backup file for locale %@ is missing"
         static let jsonFileExtension = "json"
+        static let plistFileExtension = "plist"
         static let localizationsPath = "Localizations"
         static let readingLocaleFileErrorMessage = "Error occured while reading %@. Will try to read backup file."
         static let readingLocaleZipFileErrorMessage = "Error occured while reading %@."
         static let zipFileVersionFileName = "project"
+        static let readingBackupFileErrorMessage = "Error occured while reading backup file."
+        static let readingLocaleFileNamesErrorMessage = "Error occured while reading locale file names for domain: %@."
+    }
+
+    struct FileService {
+        static let directoryNotFound = "Directory not found: %@."
+        static let fileNotFound = "File not found: %@."
+        static let readingFile = "Can not read file %@."
+        static let createTmpFile = "Can not create temp file %@"
+        static let applicationSupportDirectoryNotFound = "Application Support Directory not found"
+
+        static let tempFileNameSuffix = "_tmp"
     }
     
     struct UserDefaultKeys {
@@ -67,5 +86,22 @@ struct Constants {
         static let authHeader = "X-Authorization"
         static let contentTypeHeader = "Content-Type"
         static let contentTypeValue = "application/json"
+    }
+
+    struct JSONConfigKey {
+        static let projectVersion = "project_version"
+    }
+
+    struct UpdateLocalizationsWorker {
+        static let encodingError = "Encoding error: %@"
+        static let decodingError = "Decoding error: %@"
+        static let invalidBaseUrlError = "Invalid base URL: %@."
+    }
+
+    struct ConfigurationLoader {
+        static let configurationPlistFileName = "FlexxConfig"
+
+        static let errorPlistNotFound = "An error occured while reading FlexxConfig.plist. Please check that FlexxConfig.plist is included in the target."
+        static let errorInvalidContent = "An error occured while reading FlexxConfig.plist. Please check if it is a valid plist file."
     }
 }

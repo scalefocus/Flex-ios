@@ -57,8 +57,10 @@ struct LocaleTranslations: Codable {
         /// Our translations can be of two types:
         /// [String: [String: String]] or [String: String]
         do {
-            let translationsWithContext = try codingKeys.decode([String: [String: String]].self, forKey: .translations)
-            translations = LocaleTranslations.flatTranslations(translations: translationsWithContext)
+            let translationsWithContext = try codingKeys
+                .decode([String: [String: String]].self, forKey: .translations)
+            translations = LocaleTranslations
+                .flatTranslations(translations: translationsWithContext)
         } catch {
             translations = try codingKeys.decode([String: String].self, forKey: .translations)
         }

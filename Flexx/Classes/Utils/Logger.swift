@@ -5,7 +5,8 @@
 //  Copyright © 2017 Upnetix. All rights reserved.
 //
 
-class Logger {
+// TODO: Add Protocol
+final class Logger {
     
     static var enableLogging = false
     

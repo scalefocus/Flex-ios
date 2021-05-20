@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>AppId</key>
-	<string></string>
+	<string>Test</string>
 	<key>BaseUrl</key>
-	<string></string>
+	<string>http://dummy-base-url.com</string>
 	<key>Domains</key>
 	<array>
-		<string></string>
-		<string></string>
+		<string>Login</string>
+		<string>Common</string>
 	</array>
 	<key>Secret</key>
-	<string></string>
+	<string>Dummy Secret</string>
 	<key>ShaValue</key>
-	<string></string>
+	<string>Some dummy value</string>
 </dict>
 </plist>
