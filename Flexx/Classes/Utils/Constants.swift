@@ -66,4 +66,13 @@ struct Constants {
         static let contentTypeHeader = "Content-Type"
         static let contentTypeValue = "application/json"
     }
+    
+    struct LocaleIDs {
+        /// Norwegian language code for iOS
+        static let norwegianBokmalLocaleFileName = "nb"
+        static let norwegianNynorskLocaleFileName = "nn"
+        
+        /// Norwegian language code in Flexx
+        static let norwegianLocaleFileNameInFlexx = "no"
+    }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 /// Protocol which we use to indicate that update is made successfully
-protocol UpdateTranslationsProtocol: class {
+protocol UpdateTranslationsProtocol: AnyObject {
     func didUpdateTranslations(domain: String, translations: [String: String])
     
     func didUpdateDomainsVersions(domain: String, version: Int)
@@ -125,7 +125,7 @@ public class Flexx {
         }
         
         setValueToDefaultLocale()
-        handleLocaleSynchronicallyForDomains(configurationInfo.domains, locale: locale)
+        handleLocaleSynchronicallyForDomains(configurationInfo.domains, localeId: locale.identifier)
         
         updateService = UpdateLocaleService(updateTranslationsProtocol: self,
                                             defaultUpdateInterval: defaultUpdateInterval,
@@ -140,6 +140,16 @@ public class Flexx {
     ///  - returns: Locale value representing current Locale
     public func getCurrentLocale() -> Locale {
         return currentLocale
+    }
+    
+    /// Check locale identifier
+    /// - returns: Locale value with valid local identifier
+    public func checkLocaleId(localeId: String) -> String {
+        if localeId == Constants.LocaleIDs.norwegianBokmalLocaleFileName ||
+            localeId == Constants.LocaleIDs.norwegianNynorskLocaleFileName {
+            return Constants.LocaleIDs.norwegianLocaleFileNameInFlexx
+        }
+        return localeId
     }
     
     /// Retreives value from a key-value collection
@@ -176,11 +186,12 @@ public class Flexx {
         
         threadSafeTranslations = [:]
         currentLocale = desiredLocale
+        let languageCode = checkLocaleId(localeId: desiredLocale.identifier)
         
-        handleLocaleSynchronicallyForDomains(configuration.domains, locale: desiredLocale)
-        updateService?.startUpdateService(locale: localeFileName(locale: desiredLocale))
+        handleLocaleSynchronicallyForDomains(configuration.domains, localeId: languageCode)
+        updateService?.startUpdateService(locale: languageCode)
         
-        Logger.log(messageFormat: "Locale is change to %@", args: [localeFileName(locale: currentLocale)])
+        Logger.log(messageFormat: "Locale is change to %@", args: [languageCode])
         completed?()
     }
     
@@ -237,12 +248,11 @@ public class Flexx {
     /// Handle locale for all domains
     /// - Parameters:
     ///   - domains: list of domain names
-    ///   - locale: current locale
-    private func handleLocaleSynchronicallyForDomains(_ domains: [String], locale: Locale) {
+    ///   - localeId: current locale identifier
+    private func handleLocaleSynchronicallyForDomains(_ domains: [String], localeId: String) {
         DispatchQueue.global(qos: .background).sync {
             for domain in domains {
-                let fileName = localeFileName(locale: locale)
-                handleLocale(fileName: fileName, domain: domain)
+                handleLocale(fileName: localeId, domain: domain)
             }
         }
     }
@@ -253,17 +263,18 @@ public class Flexx {
     /// to read backup file. If backup file is empty we switch the locale
     /// to default locale and read the backup file for it.
     private func readLocaleFile(fileName: String, domain: String) -> Data {
+        let languageCode = Flexx.shared.checkLocaleId(localeId: fileName)
         var fileContent: Data
         
-        fileContent = LocaleFileHandler.readLocaleFile(filename: fileName, domain: domain)
+        fileContent = LocaleFileHandler.readLocaleFile(filename: languageCode, domain: domain)
         
         if fileContent.isEmpty {
-            Logger.log(messageFormat: Constants.Localizer.emptyLocaleFileError, args: [fileName])
-            fileContent = LocaleFileHandler.readBackupFile(filename: fileName, domain: domain)
+            Logger.log(messageFormat: Constants.Localizer.emptyLocaleFileError, args: [languageCode])
+            fileContent = LocaleFileHandler.readBackupFile(filename: languageCode, domain: domain)
         }
         
         if fileContent.isEmpty {
-            Logger.log(messageFormat: Constants.Localizer.emptyLocaleBackupFileError, args: [fileName])
+            Logger.log(messageFormat: Constants.Localizer.emptyLocaleBackupFileError, args: [languageCode])
             Logger.log(messageFormat: Constants.Localizer.changedToDefaultLocale, args: [defaultLocaleFileName])
             fileContent = LocaleFileHandler.readBackupFile(filename: defaultLocaleFileName, domain: domain)
             currentLocale = Locale(identifier: defaultLocaleFileName)
