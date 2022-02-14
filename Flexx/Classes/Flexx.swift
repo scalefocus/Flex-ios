@@ -125,7 +125,7 @@ public class Flexx {
         }
         
         setValueToDefaultLocale()
-        handleLocaleSynchronicallyForDomains(configurationInfo.domains, localeId: locale.identifier)
+        handleLocaleSynchronicallyForDomains(configurationInfo.domains, localeId: Constants.LocaleIDs.localeId(for: locale.identifier))
         
         updateService = UpdateLocaleService(updateTranslationsProtocol: self,
                                             defaultUpdateInterval: defaultUpdateInterval,
@@ -279,7 +279,7 @@ public class Flexx {
     /// - parameter domain: Domain name
     private func handleLocale(fileName: String, domain: String) {
         // 1. Read locale file
-        let localeData = readLocaleFile(fileName: Constants.LocaleIDs.localeId(for: fileName), domain: domain)
+        let localeData = readLocaleFile(fileName: fileName, domain: domain)
         
         // 2. Parse translations to Locale
         let decoder = JSONDecoder()
