@@ -142,16 +142,6 @@ public class Flexx {
         return currentLocale
     }
     
-    /// Check locale identifier
-    /// - returns: Locale value with valid local identifier
-    public func checkLocaleId(localeId: String) -> String {
-        if localeId == Constants.LocaleIDs.norwegianBokmalLocaleFileName ||
-            localeId == Constants.LocaleIDs.norwegianNynorskLocaleFileName {
-            return Constants.LocaleIDs.norwegianLocaleFileNameInFlexx
-        }
-        return localeId
-    }
-    
     /// Retreives value from a key-value collection
     /// - parameter domain: domain that holds the translations
     /// - parameter key: key of the string
@@ -186,7 +176,7 @@ public class Flexx {
         
         threadSafeTranslations = [:]
         currentLocale = desiredLocale
-        let languageCode = checkLocaleId(localeId: desiredLocale.identifier)
+        let languageCode = Constants.LocaleIDs.localeId(for: desiredLocale.identifier)
         
         handleLocaleSynchronicallyForDomains(configuration.domains, localeId: languageCode)
         updateService?.startUpdateService(locale: languageCode)
@@ -263,18 +253,17 @@ public class Flexx {
     /// to read backup file. If backup file is empty we switch the locale
     /// to default locale and read the backup file for it.
     private func readLocaleFile(fileName: String, domain: String) -> Data {
-        let languageCode = Flexx.shared.checkLocaleId(localeId: fileName)
         var fileContent: Data
         
-        fileContent = LocaleFileHandler.readLocaleFile(filename: languageCode, domain: domain)
+        fileContent = LocaleFileHandler.readLocaleFile(filename: fileName, domain: domain)
         
         if fileContent.isEmpty {
-            Logger.log(messageFormat: Constants.Localizer.emptyLocaleFileError, args: [languageCode])
-            fileContent = LocaleFileHandler.readBackupFile(filename: languageCode, domain: domain)
+            Logger.log(messageFormat: Constants.Localizer.emptyLocaleFileError, args: [fileName])
+            fileContent = LocaleFileHandler.readBackupFile(filename: fileName, domain: domain)
         }
         
         if fileContent.isEmpty {
-            Logger.log(messageFormat: Constants.Localizer.emptyLocaleBackupFileError, args: [languageCode])
+            Logger.log(messageFormat: Constants.Localizer.emptyLocaleBackupFileError, args: [fileName])
             Logger.log(messageFormat: Constants.Localizer.changedToDefaultLocale, args: [defaultLocaleFileName])
             fileContent = LocaleFileHandler.readBackupFile(filename: defaultLocaleFileName, domain: domain)
             currentLocale = Locale(identifier: defaultLocaleFileName)
@@ -290,7 +279,7 @@ public class Flexx {
     /// - parameter domain: Domain name
     private func handleLocale(fileName: String, domain: String) {
         // 1. Read locale file
-        let localeData = readLocaleFile(fileName: fileName, domain: domain)
+        let localeData = readLocaleFile(fileName: Constants.LocaleIDs.localeId(for: fileName), domain: domain)
         
         // 2. Parse translations to Locale
         let decoder = JSONDecoder()

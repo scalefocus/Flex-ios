@@ -124,7 +124,6 @@ class LocaleFileHandler {
      - returns: Data of that file
      */
     static func readLocaleFile(filename: String, domain: String = "") -> Data {
-        let languageCode = Flexx.shared.checkLocaleId(localeId: filename)
         var fileContents: Data = Data()
         
         do {
@@ -133,14 +132,14 @@ class LocaleFileHandler {
                 localizationsDirectoryUrl = localizationsDirectoryUrl.appendingPathComponent("\(domain)")
             }
             let localeFileUrl = localizationsDirectoryUrl
-                .appendingPathComponent(languageCode)
+                .appendingPathComponent(filename)
                 .appendingPathExtension(Constants.FileHandler.jsonFileExtension)
             
             fileContents = try readFile(at: localeFileUrl)
         } catch let error {
             Logger.log(messageFormat: error.localizedDescription)
-            Logger.log(messageFormat: Constants.FileHandler.readingLocaleFileErrorMessage, args: [languageCode])
-            fileContents = readBackupFile(filename: languageCode, domain: domain)
+            Logger.log(messageFormat: Constants.FileHandler.readingLocaleFileErrorMessage, args: [filename])
+            fileContents = readBackupFile(filename: filename, domain: domain)
         }
         return fileContents
     }

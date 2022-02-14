@@ -74,5 +74,15 @@ struct Constants {
         
         /// Norwegian language code in Flexx
         static let norwegianLocaleFileNameInFlexx = "no"
+        
+        /// Get valid identifier/languagec ode for current local identifier
+        /// - returns: valid local identifier
+        static func localeId(for locale: String) -> String {
+            if locale == Constants.LocaleIDs.norwegianBokmalLocaleFileName ||
+                locale == Constants.LocaleIDs.norwegianNynorskLocaleFileName {
+                return Constants.LocaleIDs.norwegianLocaleFileNameInFlexx
+            }
+            return locale
+        }
     }
 }
