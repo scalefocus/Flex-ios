@@ -8,7 +8,7 @@
 import Foundation
 
 /// Protocol which we use to indicate that update is made successfully
-protocol UpdateTranslationsProtocol: class {
+protocol UpdateTranslationsProtocol: AnyObject {
     func didUpdateTranslations(domain: String, translations: [String: String])
     
     func didUpdateDomainsVersions(domain: String, version: Int)
@@ -125,7 +125,7 @@ public class Flexx {
         }
         
         setValueToDefaultLocale()
-        handleLocaleSynchronicallyForDomains(configurationInfo.domains, locale: locale)
+        handleLocaleSynchronicallyForDomains(configurationInfo.domains, localeId: Constants.LocaleIDs.localeId(for: locale.identifier))
         
         updateService = UpdateLocaleService(updateTranslationsProtocol: self,
                                             defaultUpdateInterval: defaultUpdateInterval,
@@ -176,11 +176,12 @@ public class Flexx {
         
         threadSafeTranslations = [:]
         currentLocale = desiredLocale
+        let languageCode = Constants.LocaleIDs.localeId(for: desiredLocale.identifier)
         
-        handleLocaleSynchronicallyForDomains(configuration.domains, locale: desiredLocale)
-        updateService?.startUpdateService(locale: localeFileName(locale: desiredLocale))
+        handleLocaleSynchronicallyForDomains(configuration.domains, localeId: languageCode)
+        updateService?.startUpdateService(locale: languageCode)
         
-        Logger.log(messageFormat: "Locale is change to %@", args: [localeFileName(locale: currentLocale)])
+        Logger.log(messageFormat: "Locale is change to %@", args: [languageCode])
         completed?()
     }
     
@@ -237,12 +238,11 @@ public class Flexx {
     /// Handle locale for all domains
     /// - Parameters:
     ///   - domains: list of domain names
-    ///   - locale: current locale
-    private func handleLocaleSynchronicallyForDomains(_ domains: [String], locale: Locale) {
+    ///   - localeId: current locale identifier
+    private func handleLocaleSynchronicallyForDomains(_ domains: [String], localeId: String) {
         DispatchQueue.global(qos: .background).sync {
             for domain in domains {
-                let fileName = localeFileName(locale: locale)
-                handleLocale(fileName: fileName, domain: domain)
+                handleLocale(fileName: localeId, domain: domain)
             }
         }
     }

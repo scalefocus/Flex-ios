@@ -130,8 +130,7 @@ class UpdateLocaleService: RequestExecutor {
     }
     
     private func getLocaleTransactions(locale: String, domain: String) -> LocaleTranslations? {
-        let localeData = LocaleFileHandler.readLocaleFile(filename: locale,
-                                                          domain: domain)
+        let localeData = LocaleFileHandler.readLocaleFile(filename: Constants.LocaleIDs.localeId(for: locale), domain: domain)
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         guard let localeTranslations = try? decoder.decode(LocaleTranslations.self,

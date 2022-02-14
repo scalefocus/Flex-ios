@@ -66,4 +66,23 @@ struct Constants {
         static let contentTypeHeader = "Content-Type"
         static let contentTypeValue = "application/json"
     }
+    
+    struct LocaleIDs {
+        /// Norwegian language code for iOS
+        static let norwegianBokmalLocaleFileName = "nb"
+        static let norwegianNynorskLocaleFileName = "nn"
+        
+        /// Norwegian language code in Flexx
+        static let norwegianLocaleFileNameInFlexx = "no"
+        
+        /// Get valid identifier/languagec ode for current local identifier
+        /// - returns: valid local identifier
+        static func localeId(for locale: String) -> String {
+            if locale == Constants.LocaleIDs.norwegianBokmalLocaleFileName ||
+                locale == Constants.LocaleIDs.norwegianNynorskLocaleFileName {
+                return Constants.LocaleIDs.norwegianLocaleFileNameInFlexx
+            }
+            return locale
+        }
+    }
 }
