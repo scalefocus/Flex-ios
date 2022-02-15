@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
     
 s.name             = 'Flexx'
-s.version          = '3.0.1'
+s.version          = '3.0.2'
 s.summary          = 'Take care for managing the localization in realtime.'
 s.description  = <<-DESC
 Add and change your localizations in CMS web page and see the changes almost immediately in your app.
